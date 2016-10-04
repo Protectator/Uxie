@@ -11,6 +11,7 @@ import urlparse
 import os, errno
 import sys
 import re
+import pymysql.cursors
 import json
 from threading import Thread, Semaphore
 from HTMLParser import HTMLParser
@@ -185,6 +186,9 @@ class UsageFile(TextPage):
         elif (line[0:2] == " |"):
             fields = [ field.strip() for field in line.split('|')[1:8] ]
             if (fields[0] != "Rank"):
+                fields[2] = fields[2][:-1]
+                fields[4] = fields[4][:-1]
+                fields[6] = fields[6][:-1]
                 self.data.append(fields)
 
 class MovesetFile(TextPage):
@@ -318,8 +322,52 @@ class LeadsFile(TextPage):
 class ChaosFile(TextPage):
     pass
 
-class Parser():
+class DataBase():
     pass
+
+class MySQL(DataBase):
+    def __init__(self):
+        self.connection = None
+
+    def connect(self):
+        self.connection = pymysql.connect(host='localhost',
+                             user='uxie',
+                             password='uxie',
+                             db='uxie',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+
+    def initialize(self):
+        with self.connection.cursor() as cursor:
+            sql = """DROP TABLE IF EXISTS `usage`;
+                  CREATE TABLE IF NOT EXISTS `usage` (
+                    `year` int(11) NOT NULL,
+                    `month` int(11) NOT NULL,
+                    `format` varchar(32) NOT NULL,
+                    `elo` int(11) NOT NULL,
+                    `pokemon` varchar(32) NOT NULL,
+                    `usage_percent` float DEFAULT NULL,
+                    `raw_usage` int(11) DEFAULT NULL,
+                    `raw_percent` float DEFAULT NULL,
+                    `real_usage` int(11) DEFAULT NULL,
+                    `real_percent` float DEFAULT NULL,
+                    UNIQUE KEY `usage_year_month_format_elo_pokemon_pk` (`year`,`month`,`format`,`elo`,`pokemon`)
+                  ) ENGINE=MyISAM DEFAULT CHARSET=latin1;"""
+            cursor.execute(sql)
+        self.connection.commit()
+
+    def fillUsage(self, usageFile):
+        try:
+            with self.connection.cursor() as cursor:
+                data = [[usageFile.year, usageFile.month, usageFile.meta, usageFile.elo, line[1], line[2], line[3], line[4], line[5], line[6]] for line in usageFile.data]
+                sql = "INSERT INTO `usage` (`year`, `month`, `format`, `elo`, `pokemon`, `usage_percent`, `raw_usage`, `raw_percent`, `real_usage`, `real_percent`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, data)
+
+            # connection is not autocommit by default. So you must commit to save
+            # your changes.
+            self.connection.commit()
+        finally:
+            self.connection.close()
 
 # Fill DB
 
@@ -327,8 +375,12 @@ class Parser():
 # crawler = Crawler('')
 # crawler.run()
 # parser = Parser()
-# page = UsageFile('stats/2014-11/350cup-0.txt')
-# page.parse()
-page = MovesetFile('stats/2016-06/moveset/lc-1500.txt')
+page = UsageFile('stats/2014-11/350cup-0.txt')
 page.parse()
+db = MySQL()
+db.connect()
+db.initialize()
+db.fillUsage(page)
+# page = MovesetFile('stats/2016-06/moveset/lc-1500.txt')
+# page.parse()
 print page.data
