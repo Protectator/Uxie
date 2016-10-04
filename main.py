@@ -11,6 +11,7 @@ import urlparse
 import os, errno
 import sys
 import re
+import json
 from threading import Thread, Semaphore
 from HTMLParser import HTMLParser
 
@@ -71,14 +72,6 @@ class FolderPage(HTMLParser):
                     else:
                         self.folders.append(value)
 
-class TextPage():
-    def __init__(self, directory, fileName, date, elo, content):
-        self.directory = directory
-        self.fileName = fileName
-        self.date = date
-        self.elo = elo
-        self.content = content
-
 class Crawler():
     def __init__(self, baseUrl):
         self.index = baseUrl
@@ -123,15 +116,16 @@ class Crawler():
         self.barrier = Semaphore(0)
         self.bar = ProgressBar(self.nbFiles)
 
-        print "/" + url + " : " + str(self.nbFiles) + " files to download."
-        for link in folder.files:
-            finalUrl = url + link
-            self.threads[finalUrl] = Thread(target=self.downloadText, args=[finalUrl])
-            self.threads[finalUrl].setName(finalUrl)
-            self.threads[finalUrl].start()
+        if self.nbFiles > 0:
+            print "/" + url + " : " + str(self.nbFiles) + " files to download."
+            for link in folder.files:
+                finalUrl = url + link
+                self.threads[finalUrl] = Thread(target=self.downloadText, args=[finalUrl])
+                self.threads[finalUrl].setName(finalUrl)
+                self.threads[finalUrl].start()
 
-        self.barrier.acquire()
-        self.barrier.release()
+            self.barrier.acquire()
+            self.barrier.release()
 
     def downloadText(self, url):
         (content, size) = downloadFile(url)
@@ -159,8 +153,39 @@ class Crawler():
 
 # Parse
 
+class TextPage():
+    def __init__(self, path):
+        self.path = path
+        matchs = re.search('^(?:/?\w+)?/?(\d+)-(\d+)/((?:[^/]+/)*)([^/]+)-(\d+)\.(txt|json)$', path)
+        self.year = (matchs.groups()[0])
+        self.month = (matchs.groups()[1])
+        self.folders = (matchs.groups()[2])
+        self.meta = (matchs.groups()[3])
+        self.elo = (matchs.groups()[4])
+        self.fileFormat = (matchs.groups()[5])
+        self.data = []
+
 class UsageFile(TextPage):
-    pass
+    def __init__(self, path):
+        TextPage.__init__(self, path)
+
+    def parse(self):
+        with open(self.path, mode='r') as file:
+            for line in file:
+                self.parseLine(line)
+        return self.data
+
+    def parseLine(self, line):
+        if (line[0:15] == "Total battles: "):
+            return
+        elif (line[0:19] == " Avg. weight/team: "):
+            return
+        elif (line[0:2] == " +"):
+            return
+        elif (line[0:2] == " |"):
+            fields = [ field.strip() for field in line.split('|')[1:8] ]
+            if (fields[0] != "Rank"):
+                self.data.append(fields)
 
 class MovesetFile(TextPage):
     pass
@@ -174,8 +199,15 @@ class LeadsFile(TextPage):
 class ChaosFile(TextPage):
     pass
 
+class Parser():
+    pass
+
 # Fill DB
 
 # Execute
-crawler = Crawler('')
-crawler.run()
+# crawler = Crawler('')
+# crawler.run()
+# parser = Parser()
+page = UsageFile('stats/2014-11/350cup-0.txt')
+page.parse()
+print page.data
