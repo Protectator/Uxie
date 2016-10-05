@@ -8,15 +8,16 @@ Copyright (C) 2016 Kewin Dousse (Protectator)
 
 Licensed under the MIT License. See file LICENSE in the project root for license information.
 """
-import re
-import os
-import urlparse
-import urllib2
 import errno
-from progressbar import *
-from constats import *
+import os
+import re
+import urllib2
+import urlparse
 from HTMLParser import HTMLParser
 from threading import Thread, Semaphore
+
+from src.constants import *
+from src.progressbar import *
 
 
 def downloadFile(url):

@@ -8,7 +8,7 @@ Copyright (C) 2016 Kewin Dousse (Protectator)
 
 Licensed under the MIT License. See file LICENSE in the project root for license information.
 """
-from metagame import *
+from src.parsers.metagame import *
 # Fill DB
 
 # Execute
