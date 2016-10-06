@@ -1,4 +1,4 @@
-# Uxie
+# Uxie [![Build Status](https://travis-ci.com/Protectator/Uxie.svg?token=sQpTnAk4qPzgpu27YfLd&branch=master)](https://travis-ci.com/Protectator/Uxie)
 
 Uxie is a tool to build a database using Pokemon Showdown's usage stats.
 
