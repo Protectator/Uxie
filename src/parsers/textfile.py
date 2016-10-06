@@ -14,7 +14,7 @@ import re
 class TextPage:
     def __init__(self, path):
         self.path = path
-        matchs = re.search('^(?:/?\w+)?/?(\d+)-(\d+)/((?:[^/]+/)*)([^/]+)-(\d+)\.(txt|json)$', path)
+        matchs = re.search('(\d+)-(\d+)(?:/?([^/]+))?/([^/]+)-(\d+)\.(\w+)$', path)
         self.year = (matchs.groups()[0])
         self.month = (matchs.groups()[1])
         self.folders = (matchs.groups()[2])
