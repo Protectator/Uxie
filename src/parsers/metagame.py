@@ -19,10 +19,9 @@ class MetagameFile(TextPage):
         self.data = {}
 
     def parse(self):
-        self.file = open(self.path, mode='r')
-        while self.nextLine() != "":
-            self.parseLine()
-        self.file.close()
+        with open(self.path, mode='r') as self.file:
+            while self.nextLine() != "":
+                self.parseLine()
         return self.data
 
     def nextLine(self):

@@ -20,17 +20,16 @@ class MovesetFile(TextPage):
         self.data = []
 
     def parse(self):
-        self.file = open(self.path, mode='r')
-        while self.nextLine() != "":
-            self.parsePokemon()
-        self.file.close()
+        with open(self.path, mode='r') as self.file:
+            while self.nextLine() != "":
+                self.parseLine()
         return self.data
 
     def nextLine(self):
         self.currentLine = self.file.readline()
         return self.currentLine
 
-    def parsePokemon(self):
+    def parseLine(self):
         self.currentPokemon = {}
         self.parseName()
         self.parseCount()

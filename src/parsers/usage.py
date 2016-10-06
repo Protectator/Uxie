@@ -14,25 +14,39 @@ from textfile import *
 class UsageFile(TextPage):
     def __init__(self, path):
         TextPage.__init__(self, path)
-        self.data = []
+        self.file = None
+        self.currentLine = None
+        self.data = {}
+        self.data['usage'] = []
 
     def parse(self):
-        with open(self.path, mode='r') as usageFile:
-            for line in usageFile:
-                self.parseLine(line)
+        with open(self.path, mode='r') as self.file:
+            while self.nextLine() != "":
+                self.parseLine()
         return self.data
 
-    def parseLine(self, line):
-        if line[0:15] == "Total battles: ":
+    def nextLine(self):
+        self.currentLine = self.file.readline()
+        return self.currentLine
+
+    def parseLine(self):
+        if "Total battles:" in self.currentLine:
+            self.data['total_battles'] = None
             return
-        elif line[0:19] == " Avg. weight/team: ":
+        elif "Avg. weight/team:" in self.currentLine:
+            self.data['avg_weight_per_team'] = None
             return
-        elif line[0:2] == " +":
+        elif "----" in self.currentLine:
             return
-        elif line[0:2] == " |":
-            fields = [field.strip() for field in line.split('|')[1:8]]
+        elif " | " in self.currentLine:
+            fields = [field.strip() for field in self.currentLine.split('|')[1:8]]
             if fields[0] != "Rank":
-                fields[2] = fields[2][:-1]
-                fields[4] = fields[4][:-1]
-                fields[6] = fields[6][:-1]
-                self.data.append(fields)
+                pokemon = {}
+                pokemon['rank'] = fields[0]
+                pokemon['name'] = fields[1]
+                pokemon['usage_percent'] = fields[2][:-1]
+                pokemon['raw_number'] = fields[3]
+                pokemon['raw_percent'] = fields[4][:-1]
+                pokemon['real_number'] = fields[5]
+                pokemon['real_percent'] = fields[6][:-1]
+                self.data['usage'].append(pokemon)
