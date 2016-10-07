@@ -64,12 +64,13 @@ class MovesetFile(TextPage):
         self.nextLine()  # '+----+'
         self.nextLine()  # ' | Abilities | '
         self.currentPokemon['abilities'] = []
-        while "+--" not in self.nextLine():
+        while "+--" not in self.currentLine:
             ability = {}
             matches = re.search('^ \| ([^|]+) +([\d.]+)%', self.currentLine)  # ' | Gale Wings 67.393% | '
-            ability['name'] = matches.groups()[0]
+            ability['name'] = matches.groups()[0].strip()
             ability['percentage'] = float(matches.groups()[1])
             self.currentPokemon['abilities'].append(ability)
+            self.nextLine()
 
     def parseItems(self):
         self.nextLine()  # ' | Items | '
@@ -77,22 +78,29 @@ class MovesetFile(TextPage):
         while "+--" not in self.nextLine():
             item = {}
             matches = re.search('^ \| ([^|]+) +([\d.]+)%', self.currentLine)  # ' | Rocky Helmet 16.875% | '
-            item['name'] = matches.groups()[0]
+            item['name'] = matches.groups()[0].strip()
             item['percentage'] = float(matches.groups()[1])
             self.currentPokemon['items'].append(item)
 
     def parseSpreads(self):
         self.nextLine()  # ' | Spreads | '
-        self.currentPokemon['ev_spreads'] = []
+        self.currentPokemon['spreads'] = []
         while "+--" not in self.nextLine():
             spread = {}
             matches = re.search('^ \| (?:(\w+):(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)|(Other)) +([\d.]+)%',
                                 self.currentLine)  # ' | Timid:0/0/0/252/4/252 58.111% | '
             if matches.groups()[7] == "Other":
                 spread['is_other'] = True
+                spread['nature'] = "Other"
+                spread['hp'] = None
+                spread['atk'] = None
+                spread['def'] = None
+                spread['spa'] = None
+                spread['spd'] = None
+                spread['spe'] = None
             else:
                 spread['is_other'] = False
-                spread['nature'] = matches.groups()[0]
+                spread['nature'] = matches.groups()[0].strip()
                 spread['hp'] = int(matches.groups()[1])
                 spread['atk'] = int(matches.groups()[2])
                 spread['def'] = int(matches.groups()[3])
@@ -100,7 +108,7 @@ class MovesetFile(TextPage):
                 spread['spd'] = int(matches.groups()[5])
                 spread['spe'] = int(matches.groups()[6])
             spread['percentage'] = float(matches.groups()[8])
-            self.currentPokemon['ev_spreads'].append(spread)
+            self.currentPokemon['spreads'].append(spread)
 
     def parseMoves(self):
         self.nextLine()  # ' | Moves | '
@@ -108,7 +116,7 @@ class MovesetFile(TextPage):
         while "+--" not in self.nextLine():
             move = {}
             matches = re.search('^ \| ([^|]+) +([\d.]+)%', self.currentLine)  # ' | Brave Bird 99.882% | '
-            move['name'] = matches.groups()[0]
+            move['name'] = matches.groups()[0].strip()
             move['percentage'] = float(matches.groups()[1])
             self.currentPokemon['moves'].append(move)
 
@@ -118,7 +126,7 @@ class MovesetFile(TextPage):
         while "+--" not in self.nextLine():
             mate = {}
             matches = re.search('^ \| ([^|]+) +([+-]?[\d.]+)%', self.currentLine)  # ' | Meloetta +15.409% | '
-            mate['name'] = matches.groups()[0]
+            mate['name'] = matches.groups()[0].strip()
             mate['percentage'] = float(matches.groups()[1])
             self.currentPokemon['teammates'].append(mate)
 
@@ -129,7 +137,7 @@ class MovesetFile(TextPage):
             counter = {}
             matches = re.search('^ \| ([^|]+) ([\d.]+) \(([\d.]+)\D+([\d.]+)\)',
                                 self.currentLine)  # ' | Trubbish 75.535 (86.41±2.72) | '
-            counter['name'] = matches.groups()[0]
+            counter['name'] = matches.groups()[0].strip()
             counter['number1'] = float(matches.groups()[1])
             counter['number2'] = float(matches.groups()[2])
             counter['number3'] = float(matches.groups()[3])

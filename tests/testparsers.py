@@ -11,6 +11,7 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 import unittest
 from src.parsers.usage import UsageFile
 from src.parsers.metagame import MetagameFile
+from src.parsers.moveset import MovesetFile
 
 class UsageTest(unittest.TestCase):
     def test_parse(self):
@@ -38,3 +39,60 @@ class MetagameTest(unittest.TestCase):
         self.assertEquals(result['graph']['bars'][0], 1, "Graph's first bar length is 1")
         self.assertEquals(result['graph']['bars'][2], 14, "Graph's third bar length is 14")
         self.assertEquals(len(result['graph']['bars']), 20, "Graph's length is 20")
+
+
+class MovesetTest(unittest.TestCase):
+    def test_parse(self):
+        moveset_file = MovesetFile('tests/textfiles/2016-08/moveset/uu-1760.txt')
+        moveset_file.parse()
+        result = moveset_file.data
+        self.assertEquals(result[1]['name'], "Steelix-Mega")
+        self.assertEquals(result[1]['raw_count'], 15127)
+        self.assertEquals(result[1]['avg_weight'], 0.0193931433493)
+        self.assertEquals(result[1]['viability_ceiling'], 88)
+        self.assertEquals(result[0]['abilities'][0]['name'], "Pixilate")
+        self.assertEquals(result[0]['abilities'][0]['percentage'], 99.652)
+        self.assertEquals(result[0]['abilities'][1]['name'], "Cute Charm")
+        self.assertEquals(result[0]['abilities'][1]['percentage'], 0.348)
+        self.assertEquals(result[0]['items'][0]['name'], "Leftovers")
+        self.assertEquals(result[0]['items'][0]['percentage'], 45.327)
+        self.assertEquals(result[0]['items'][3]['name'], "Other")
+        self.assertEquals(result[0]['items'][3]['percentage'], 1.290)
+        self.assertEquals(result[0]['spreads'][0]['is_other'], False)
+        self.assertEquals(result[0]['spreads'][0]['nature'], "Modest")
+        self.assertEquals(result[0]['spreads'][0]['hp'], 0)
+        self.assertEquals(result[0]['spreads'][0]['atk'], 0)
+        self.assertEquals(result[0]['spreads'][0]['def'], 0)
+        self.assertEquals(result[0]['spreads'][0]['spa'], 252)
+        self.assertEquals(result[0]['spreads'][0]['spd'], 4)
+        self.assertEquals(result[0]['spreads'][0]['spe'], 252)
+        self.assertEquals(result[0]['spreads'][0]['percentage'], 9.452)
+        self.assertEquals(result[0]['spreads'][6]['is_other'], True)
+        self.assertEquals(result[0]['spreads'][6]['nature'], "Other")
+        self.assertEquals(result[0]['spreads'][6]['hp'], None)
+        self.assertEquals(result[0]['spreads'][6]['atk'], None)
+        self.assertEquals(result[0]['spreads'][6]['def'], None)
+        self.assertEquals(result[0]['spreads'][6]['spa'], None)
+        self.assertEquals(result[0]['spreads'][6]['spd'], None)
+        self.assertEquals(result[0]['spreads'][6]['spe'], None)
+        self.assertEquals(result[0]['spreads'][6]['percentage'], 57.668)
+        self.assertEquals(result[0]['moves'][0]['name'], "Hyper Voice")
+        self.assertEquals(result[0]['moves'][0]['percentage'], 99.466)
+        self.assertEquals(result[0]['moves'][11]['name'], "Other")
+        self.assertEquals(result[0]['moves'][11]['percentage'], 16.493)
+        self.assertEquals(result[0]['teammates'][0]['name'], "Krookodile")
+        self.assertEquals(result[0]['teammates'][0]['percentage'], 9.854)
+        self.assertEquals(result[0]['teammates'][11]['name'], "Qwilfish")
+        self.assertEquals(result[0]['teammates'][11]['percentage'], 2.313)
+        self.assertEquals(result[0]['counters'][0]['name'], "Nidoking")
+        self.assertEquals(result[0]['counters'][0]['number1'], 72.955)
+        self.assertEquals(result[0]['counters'][0]['number2'], 90.57)
+        self.assertEquals(result[0]['counters'][0]['number3'], 4.40)
+        self.assertEquals(result[0]['counters'][0]['koed'], 28.8)
+        self.assertEquals(result[0]['counters'][0]['switched_out'], 61.8)
+        self.assertEquals(result[0]['counters'][6]['name'], "Blissey")
+        self.assertEquals(result[0]['counters'][6]['number1'], 53.809)
+        self.assertEquals(result[0]['counters'][6]['number2'], 69.21)
+        self.assertEquals(result[0]['counters'][6]['number3'], 3.85)
+        self.assertEquals(result[0]['counters'][6]['koed'], 5.1)
+        self.assertEquals(result[0]['counters'][6]['switched_out'], 64.1)

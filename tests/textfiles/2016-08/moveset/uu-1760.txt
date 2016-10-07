@@ -1,0 +1,355 @@
++----------------------------------------+ 
+ | Sylveon                                | 
+ +----------------------------------------+ 
+ | Raw count: 175294                      | 
+ | Avg. weight: 0.0399727306883           | 
+ | Viability Ceiling: 95                  | 
+ +----------------------------------------+ 
+ | Abilities                              | 
+ | Pixilate 99.652%                       | 
+ | Cute Charm  0.348%                     | 
+ +----------------------------------------+ 
+ | Items                                  | 
+ | Leftovers 45.327%                      | 
+ | Choice Specs 44.619%                   | 
+ | Pixie Plate  8.764%                    | 
+ | Other  1.290%                          | 
+ +----------------------------------------+ 
+ | Spreads                                | 
+ | Modest:0/0/0/252/4/252  9.452%         | 
+ | Modest:0/0/4/252/0/252  7.979%         | 
+ | Bold:252/0/252/0/4/0  7.363%           | 
+ | Modest:0/0/0/252/0/252  6.914%         | 
+ | Bold:252/0/252/4/0/0  6.820%           | 
+ | Modest:248/0/0/252/8/0  3.804%         | 
+ | Other 57.668%                          | 
+ +----------------------------------------+ 
+ | Moves                                  | 
+ | Hyper Voice 99.466%                    | 
+ | Psyshock 49.373%                       | 
+ | Wish 41.561%                           | 
+ | Heal Bell 38.400%                      | 
+ | Baton Pass 36.210%                     | 
+ | Protect 35.783%                        | 
+ | Hidden Power Fire 27.348%              | 
+ | Shadow Ball 26.268%                    | 
+ | Calm Mind 16.939%                      | 
+ | Rest  6.098%                           | 
+ | Quick Attack  6.061%                   | 
+ | Other 16.493%                          | 
+ +----------------------------------------+ 
+ | Teammates                              | 
+ | Krookodile +9.854%                     | 
+ | Conkeldurr +6.685%                     | 
+ | Crobat +5.193%                         | 
+ | Gyarados +5.052%                       | 
+ | Celebi +4.786%                         | 
+ | Metagross +4.705%                      | 
+ | Houndoom-Mega +3.640%                  | 
+ | Swampert-Mega +3.247%                  | 
+ | Moltres +2.638%                        | 
+ | Forretress +2.591%                     | 
+ | Abomasnow-Mega +2.464%                 | 
+ | Qwilfish +2.313%                       | 
+ +----------------------------------------+ 
+ | Checks and Counters                    | 
+ | Nidoking 72.955 (90.57±4.40)           |
+ |	 (28.8% KOed / 61.8% switched out)| 
+ | Entei 67.879 (81.61±3.43)              |
+ |	 (30.8% KOed / 50.8% switched out)| 
+ | Metagross 63.026 (81.50±4.62)          |
+ |	 (13.4% KOed / 68.1% switched out)| 
+ | Aggron-Mega 62.004 (79.08±4.27)        |
+ |	 (12.5% KOed / 66.5% switched out)| 
+ | Beedrill-Mega 60.609 (76.58±3.99)      |
+ |	 (27.1% KOed / 49.5% switched out)| 
+ | Nidoqueen 59.133 (79.64±5.13)          |
+ |	 (18.8% KOed / 60.8% switched out)| 
+ | Blissey 53.809 (69.21±3.85)            |
+ |	 (5.1% KOed / 64.1% switched out) | 
+ +----------------------------------------+ 
+ +----------------------------------------+ 
+ | Steelix-Mega                           | 
+ +----------------------------------------+ 
+ | Raw count: 15127                       | 
+ | Avg. weight: 0.0193931433493           | 
+ | Viability Ceiling: 88                  | 
+ +----------------------------------------+ 
+ | Abilities                              | 
+ | Sand Force 100.000%                    | 
+ +----------------------------------------+ 
+ | Items                                  | 
+ | Steelixite 100.000%                    | 
+ +----------------------------------------+ 
+ | Spreads                                | 
+ | Impish:252/0/56/0/200/0 37.985%        | 
+ | Careful:252/0/4/0/252/0 18.229%        | 
+ | Adamant:248/252/0/0/8/0  5.609%        | 
+ | Careful:252/0/0/0/244/12  3.622%       | 
+ | Impish:252/0/16/0/240/0  2.996%        | 
+ | Careful:252/4/0/0/252/0  2.649%        | 
+ | Other 28.909%                          | 
+ +----------------------------------------+ 
+ | Moves                                  | 
+ | Earthquake 98.117%                     | 
+ | Heavy Slam 92.076%                     | 
+ | Stealth Rock 89.604%                   | 
+ | Roar 71.905%                           | 
+ | Toxic 15.236%                          | 
+ | Dragon Tail  6.922%                    | 
+ | Rest  4.907%                           | 
+ | Gyro Ball  3.844%                      | 
+ | Other 17.389%                          | 
+ +----------------------------------------+ 
+ | Teammates                              | 
+ | Tentacruel +24.136%                    | 
+ | Alomomola +19.060%                     | 
+ | Crobat +17.391%                        | 
+ | Mandibuzz +16.458%                     | 
+ | Whimsicott +16.127%                    | 
+ | Blissey +15.645%                       | 
+ | Hydreigon +13.928%                     | 
+ | Sableye +8.213%                        | 
+ | Conkeldurr +7.929%                     | 
+ | Vaporeon +7.262%                       | 
+ | Florges +4.651%                        | 
+ | Zoroark +4.509%                        | 
+ +----------------------------------------+ 
+ | Checks and Counters                    | 
+ +----------------------------------------+ 
+ +----------------------------------------+ 
+ | Hydreigon                              | 
+ +----------------------------------------+ 
+ | Raw count: 158612                      | 
+ | Avg. weight: 0.0341092892946           | 
+ | Viability Ceiling: 92                  | 
+ +----------------------------------------+ 
+ | Abilities                              | 
+ | Levitate 100.000%                      | 
+ +----------------------------------------+ 
+ | Items                                  | 
+ | Choice Scarf 51.494%                   | 
+ | Life Orb 34.401%                       | 
+ | Choice Specs  8.559%                   | 
+ | Leftovers  2.738%                      | 
+ | Other  2.809%                          | 
+ +----------------------------------------+ 
+ | Spreads                                | 
+ | Timid:0/0/0/252/4/252 56.180%          | 
+ | Hasty:0/4/0/252/0/252 12.631%          | 
+ | Modest:0/0/0/252/4/252  9.557%         | 
+ | Naive:0/4/0/252/0/252  3.049%          | 
+ | Timid:0/4/0/252/0/252  2.925%          | 
+ | Timid:0/0/4/252/0/252  1.958%          | 
+ | Other 13.700%                          | 
+ +----------------------------------------+ 
+ | Moves                                  | 
+ | Dark Pulse 98.480%                     | 
+ | Draco Meteor 94.809%                   | 
+ | U-turn 55.150%                         | 
+ | Fire Blast 49.492%                     | 
+ | Roost 25.056%                          | 
+ | Taunt 16.254%                          | 
+ | Flash Cannon 14.674%                   | 
+ | Superpower 14.673%                     | 
+ | Iron Tail  9.045%                      | 
+ | Earth Power  6.026%                    | 
+ | Other 16.341%                          | 
+ +----------------------------------------+ 
+ | Teammates                              | 
+ | Beedrill-Mega +14.827%                 | 
+ | Tentacruel +9.551%                     | 
+ | Cobalion +8.173%                       | 
+ | Whimsicott +7.343%                     | 
+ | Feraligatr +7.026%                     | 
+ | Azelf +6.438%                          | 
+ | Entei +5.272%                          | 
+ | Arcanine +4.604%                       | 
+ | Nidoqueen +3.666%                      | 
+ | Conkeldurr +2.764%                     | 
+ | Swampert-Mega +2.270%                  | 
+ | Metagross +1.389%                      | 
+ +----------------------------------------+ 
+ | Checks and Counters                    | 
+ | Conkeldurr 62.728 (79.34±4.15)         |
+ |	 (27.3% KOed / 52.0% switched out)| 
+ | Blissey 60.007 (78.46±4.61)            |
+ |	 (4.7% KOed / 73.8% switched out) | 
+ | Sylveon 56.939 (70.89±3.49)            |
+ |	 (18.1% KOed / 52.8% switched out)| 
+ +----------------------------------------+ 
+ +----------------------------------------+ 
+ | Krookodile                             | 
+ +----------------------------------------+ 
+ | Raw count: 132658                      | 
+ | Avg. weight: 0.039580780237            | 
+ | Viability Ceiling: 91                  | 
+ +----------------------------------------+ 
+ | Abilities                              | 
+ | Intimidate 77.782%                     | 
+ | Moxie 22.204%                          | 
+ | Anger Point  0.014%                    | 
+ +----------------------------------------+ 
+ | Items                                  | 
+ | Choice Band 52.294%                    | 
+ | Choice Scarf 15.085%                   | 
+ | Dread Plate  9.350%                    | 
+ | Black Glasses  6.850%                  | 
+ | Assault Vest  4.566%                   | 
+ | Rocky Helmet  3.595%                   | 
+ | Leftovers  3.325%                      | 
+ | Other  4.934%                          | 
+ +----------------------------------------+ 
+ | Spreads                                | 
+ | Jolly:0/252/4/0/0/252 44.770%          | 
+ | Jolly:0/252/0/0/4/252 24.690%          | 
+ | Jolly:4/252/0/0/0/252  6.236%          | 
+ | Adamant:0/252/12/0/0/244  4.264%       | 
+ | Jolly:0/252/0/0/0/252  2.096%          | 
+ | Jolly:0/216/40/0/0/252  1.991%         | 
+ | Other 15.954%                          | 
+ +----------------------------------------+ 
+ | Moves                                  | 
+ | Earthquake 99.842%                     | 
+ | Knock Off 98.215%                      | 
+ | Pursuit 76.484%                        | 
+ | Superpower 47.211%                     | 
+ | Stone Edge 25.951%                     | 
+ | Stealth Rock 24.426%                   | 
+ | Taunt 12.483%                          | 
+ | Other 15.387%                          | 
+ +----------------------------------------+ 
+ | Teammates                              | 
+ | Sylveon +12.875%                       | 
+ | Gyarados +5.273%                       | 
+ | Ampharos-Mega +4.756%                  | 
+ | Tentacruel +4.419%                     | 
+ | Moltres +4.298%                        | 
+ | Sceptile-Mega +4.131%                  | 
+ | Abomasnow-Mega +3.645%                 | 
+ | Empoleon +3.636%                       | 
+ | Qwilfish +3.218%                       | 
+ | Forretress +3.135%                     | 
+ | Blastoise-Mega +2.991%                 | 
+ | Dugtrio +2.872%                        | 
+ +----------------------------------------+ 
+ | Checks and Counters                    | 
+ | Chesnaught 62.104 (85.32±5.80)         |
+ |	 (6.7% KOed / 78.6% switched out) | 
+ | Conkeldurr 59.258 (78.03±4.69)         |
+ |	 (22.0% KOed / 56.0% switched out)| 
+ | Sceptile-Mega 56.650 (85.45±7.20)      |
+ |	 (29.9% KOed / 55.5% switched out)| 
+ | Tangela 50.370 (79.29±7.23)            |
+ |	 (8.8% KOed / 70.5% switched out) | 
+ +----------------------------------------+ 
+ +----------------------------------------+ 
+ | Shuckle                                | 
+ +----------------------------------------+ 
+ | Raw count: 28313                       | 
+ | Avg. weight: 0.0112386172618           | 
+ | Viability Ceiling: 88                  | 
+ +----------------------------------------+ 
+ | Abilities                              | 
+ | Sturdy 86.590%                         | 
+ | Contrary  7.919%                       | 
+ | Gluttony  5.491%                       | 
+ +----------------------------------------+ 
+ | Items                                  | 
+ | Custap Berry 50.660%                   | 
+ | Mental Herb 33.119%                    | 
+ | Leftovers 10.670%                      | 
+ | Rocky Helmet  1.889%                   | 
+ | Other  3.663%                          | 
+ +----------------------------------------+ 
+ | Spreads                                | 
+ | Bold:252/0/252/0/4/0 23.297%           | 
+ | Bold:240/0/252/0/16/0 19.488%          | 
+ | Bold:248/0/252/0/8/0 17.334%           | 
+ | Calm:248/0/8/0/252/0  9.159%           | 
+ | Calm:248/0/0/8/252/0  5.640%           | 
+ | Calm:252/0/4/0/252/0  3.474%           | 
+ | Other 21.606%                          | 
+ +----------------------------------------+ 
+ | Moves                                  | 
+ | Stealth Rock 96.596%                   | 
+ | Sticky Web 96.537%                     | 
+ | Encore 89.115%                         | 
+ | Toxic 84.383%                          | 
+ | Infestation 11.067%                    | 
+ | Knock Off  9.939%                      | 
+ | Other 12.363%                          | 
+ +----------------------------------------+ 
+ | Teammates                              | 
+ | Blastoise-Mega +61.185%                | 
+ | Tornadus +53.743%                      | 
+ | Doublade +49.150%                      | 
+ | Sylveon +27.939%                       | 
+ | Krookodile +19.591%                    | 
+ | Heracross +9.183%                      | 
+ | Nidoking +7.931%                       | 
+ | Jellicent +7.409%                      | 
+ | Hoopa +7.078%                          | 
+ | Blastoise +1.493%                      | 
+ | Clawitzer +0.851%                      | 
+ | Sawk +0.782%                           | 
+ +----------------------------------------+ 
+ | Checks and Counters                    | 
+ +----------------------------------------+ 
+ +----------------------------------------+ 
+ | Mr. Mime                               | 
+ +----------------------------------------+ 
+ | Raw count: 2199                        | 
+ | Avg. weight: 0.00349391089982          | 
+ | Viability Ceiling: 79                  | 
+ +----------------------------------------+ 
+ | Abilities                              | 
+ | Soundproof 70.664%                     | 
+ | Filter 25.539%                         | 
+ | Technician  3.797%                     | 
+ +----------------------------------------+ 
+ | Items                                  | 
+ | Choice Scarf 59.410%                   | 
+ | Focus Sash 22.941%                     | 
+ | Choice Specs  8.903%                   | 
+ | Light Clay  3.827%                     | 
+ | Other  4.919%                          | 
+ +----------------------------------------+ 
+ | Spreads                                | 
+ | Timid:0/0/0/252/4/252 86.231%          | 
+ | Calm:252/0/4/0/252/0  3.693%           | 
+ | Timid:0/0/4/252/0/252  3.639%          | 
+ | Modest:0/0/4/252/0/252  3.394%         | 
+ | Other  3.044%                          | 
+ +----------------------------------------+ 
+ | Moves                                  | 
+ | Dazzling Gleam 90.492%                 | 
+ | Thunderbolt 70.891%                    | 
+ | Focus Blast 63.992%                    | 
+ | Psychic 55.626%                        | 
+ | Psyshock 35.881%                       | 
+ | Nasty Plot 21.597%                     | 
+ | Baton Pass 20.815%                     | 
+ | Shadow Ball  5.643%                    | 
+ | Hidden Power Fire  4.114%              | 
+ | Charge Beam  4.087%                    | 
+ | Reflect  3.963%                        | 
+ | Light Screen  3.848%                   | 
+ | Other 19.050%                          | 
+ +----------------------------------------+ 
+ | Teammates                              | 
+ | Sigilyph +66.998%                      | 
+ | Gligar +61.747%                        | 
+ | Cobalion +56.902%                      | 
+ | Sableye +25.275%                       | 
+ | Sawk +25.055%                          | 
+ | Blissey +21.761%                       | 
+ | Slurpuff +18.156%                      | 
+ | Cloyster +14.035%                      | 
+ | Druddigon +12.463%                     | 
+ | Galvantula +11.473%                    | 
+ | Sceptile-Mega +10.328%                 | 
+ | Whimsicott +8.624%                     | 
+ +----------------------------------------+ 
+ | Checks and Counters                    | 
+ +----------------------------------------+ 
