@@ -12,6 +12,8 @@ import unittest
 from src.parsers.usage import UsageFile
 from src.parsers.metagame import MetagameFile
 from src.parsers.moveset import MovesetFile
+from src.parsers.leads import LeadsFile
+from src.parsers.chaos import ChaosFile
 
 class UsageTest(unittest.TestCase):
     def test_parse(self):
@@ -96,3 +98,19 @@ class MovesetTest(unittest.TestCase):
         self.assertEquals(result[0]['counters'][6]['number3'], 3.85)
         self.assertEquals(result[0]['counters'][6]['koed'], 5.1)
         self.assertEquals(result[0]['counters'][6]['switched_out'], 64.1)
+
+
+class LeadsTest(unittest.TestCase):
+    def test_parse(self):
+        leads_file = LeadsFile('tests/textfiles/2016-08/leads/uu-1760.txt')
+        leads_file.parse()
+        result = leads_file.data
+        self.assertEquals(result['usage'][45]['name'], "Shuckle", "46th Pokemon is Shuckle")
+        self.assertEquals(result['usage'][45]['rank'], "46", "Rank of Shuckle is 46")
+        self.assertEquals(result['usage'][45]['usage_percent'], "0.64718", "Shuckle has 0.64718% usage")
+        self.assertEquals(result['total_leads'], "1177836", "Total battles is 1177836")
+
+
+class ChaosTest(unittest.TestCase):
+    def test_parse(self):
+        pass
