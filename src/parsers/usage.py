@@ -31,10 +31,10 @@ class UsageFile(TextPage):
 
     def parseLine(self):
         if "Total battles:" in self.currentLine:
-            self.data['total_battles'] = None
+            self.data['total_battles'] = self.currentLine.split(': ')[1].strip()
             return
         elif "Avg. weight/team:" in self.currentLine:
-            self.data['avg_weight_per_team'] = None
+            self.data['avg_weight'] = self.currentLine.split(': ')[1].strip()
             return
         elif "----" in self.currentLine:
             return

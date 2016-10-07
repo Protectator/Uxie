@@ -10,11 +10,12 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 import sys
 import redgreenunittest as unittest
-from tests.testparsers import UsageTest
+from tests.testparsers import UsageTest, MetagameTest
 
 def suite():
     return unittest.TestSuite((
-        unittest.makeSuite(UsageTest)
+        unittest.makeSuite(UsageTest),
+        unittest.makeSuite(MetagameTest)
     ))
 
 if __name__ == '__main__':

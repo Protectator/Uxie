@@ -67,14 +67,15 @@ class MetagameFile(TextPage):
         graph['increment'] = (secondNumber - firstNumber) / float(secondNumberLine - firstNumberLine)
         graph['lowest'] = firstNumber - firstNumberLine * graph['increment']
         matches = re.search('=\s+([\d.]+)\s?%', self.nextLine())  # ' one # =  0.68%'
-        graph['characterValue'] = matches.groups()[0]
+        graph['characterValue'] = float(matches.groups()[0])
         self.data['graph'] = graph
 
     def parseTeam(self):
         self.data['teams'] = []
-        while "%" in self.nextLine():
+        while "%" in self.currentLine:
             team = {}
             matches = re.search('(\w+)\.*\s?(\d[\d.]+)', self.currentLine)  # ' semistall..................... 5.39178%'
             team['type'] = matches.groups()[0]
             team['percentage'] = matches.groups()[1]
             self.data['teams'].append(team)
+            self.nextLine()
