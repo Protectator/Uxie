@@ -43,6 +43,15 @@ CREATE TABLE IF NOT EXISTS `leads` (
   `month` INT(11) NOT NULL,
   `format` VARCHAR(32) NOT NULL,
   `elo` INT(11) NOT NULL,
+  `total_leads` INT(11) NOT NULL,
+  PRIMARY KEY (`year`,`month`,`format`,`elo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `leads_pokemons` (
+  `year` INT(11) NOT NULL,
+  `month` INT(11) NOT NULL,
+  `format` VARCHAR(32) NOT NULL,
+  `elo` INT(11) NOT NULL,
   `pokemon` VARCHAR(32) NOT NULL,
   `usage_percent` FLOAT NOT NULL,
   `raw_usage` INT(11) NOT NULL,

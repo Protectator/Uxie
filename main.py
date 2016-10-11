@@ -10,6 +10,7 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 from src.parsers.usage import *
 from src.databases.mysql import *
+from src.parsers.leads import *
 # Fill DB
 
 # Execute
@@ -20,10 +21,13 @@ from src.databases.mysql import *
 # page.parse()
 # page = MovesetFile('stats/2016-06/moveset/lc-1500.txt')
 # page.parse()
-page =  UsageFile('stats/2016-08/uu-0.txt')
+
+# page = UsageFile('stats/2016-08/uu-0.txt')
+# page.parse()
+page = LeadsFile('stats/2016-08/leads/uu-0.txt')
 page.parse()
 
 db = MySQL()
 db.connect()
 db.initialize()
-db.fillUsage(page)
+db.fillLeads(page)

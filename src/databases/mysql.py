@@ -28,8 +28,8 @@ class MySQL(DataBase):
 
     def initialize(self):
         with self.connection.cursor() as cursor:
-            with open("src/databases/init_mysql.sql", mode='r') as file:
-                sql = file.read()
+            with open("src/databases/init_mysql.sql", mode='r') as inputFile:
+                sql = inputFile.read()
             cursor.execute(sql)
         self.connection.commit()
 
@@ -56,6 +56,37 @@ class MySQL(DataBase):
                       " `real_usage`, `real_percent`)" \
                       " VALUES " \
                       "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, data)
+
+            # connection is not autocommit by default. So you must commit to save
+            # your changes.
+            self.connection.commit()
+        finally:
+            self.connection.close()
+
+
+    def fillLeads(self, leadsFile):
+        try:
+            with self.connection.cursor() as cursor:
+                # Insert general values into `usage` table
+                data = (leadsFile.year, leadsFile.month, leadsFile.meta, leadsFile.elo,
+                        leadsFile.data['total_leads'])
+                sql = "INSERT INTO `leads`" \
+                      "(`year`, `month`, `format`, `elo`, `total_leads`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s)"
+                cursor.execute(sql, data)
+
+                # Insert each value into `usage_pokemons` table
+                data = [
+                    [leadsFile.year, leadsFile.month, leadsFile.meta, leadsFile.elo, line['name'],
+                     line['usage_percent'], line['raw_number'], line['raw_percent']
+                     ] for line in leadsFile.data['usage']]
+                sql = "INSERT INTO `leads_pokemons`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`," \
+                      " `usage_percent`, `raw_usage`, `raw_percent`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s, %s)"
                 cursor.executemany(sql, data)
 
             # connection is not autocommit by default. So you must commit to save
