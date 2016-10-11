@@ -68,7 +68,7 @@ class MySQL(DataBase):
     def fillLeads(self, leadsFile):
         try:
             with self.connection.cursor() as cursor:
-                # Insert general values into `usage` table
+                # Insert general values into `leads` table
                 data = (leadsFile.year, leadsFile.month, leadsFile.meta, leadsFile.elo,
                         leadsFile.data['total_leads'])
                 sql = "INSERT INTO `leads`" \
@@ -77,7 +77,7 @@ class MySQL(DataBase):
                       "(%s, %s, %s, %s, %s)"
                 cursor.execute(sql, data)
 
-                # Insert each value into `usage_pokemons` table
+                # Insert each value into `leads_pokemons` table
                 data = [
                     [leadsFile.year, leadsFile.month, leadsFile.meta, leadsFile.elo, line['name'],
                      line['usage_percent'], line['raw_number'], line['raw_percent']
@@ -87,6 +87,43 @@ class MySQL(DataBase):
                       " `usage_percent`, `raw_usage`, `raw_percent`)" \
                       " VALUES " \
                       "(%s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, data)
+
+            # connection is not autocommit by default. So you must commit to save
+            # your changes.
+            self.connection.commit()
+        finally:
+            self.connection.close()
+
+
+    def fillMetagame(self, metagameFile):
+        try:
+            with self.connection.cursor() as cursor:
+                # Insert each value into `metagame_usages` table
+                data = [
+                    [metagameFile.year, metagameFile.month, metagameFile.meta, metagameFile.elo,
+                     line['type'], line['percentage']
+                     ] for line in metagameFile.data['teams']]
+                sql = "INSERT INTO `metagame_usages`" \
+                      "(`year`, `month`, `format`, `elo`, `metagame`, `percentage`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, data)
+
+                # Insert each value into `metagame_graphs` table
+                lowest = metagameFile.data['graph']['lowest']
+                increment = metagameFile.data['graph']['increment']
+                characterValue = metagameFile.data['graph']['characterValue']
+                i = 0
+                data = []
+                for line in metagameFile.data['graph']['bars']:
+                    data.append([metagameFile.year, metagameFile.month, metagameFile.meta, metagameFile.elo,
+                                 lowest + i*increment, line * characterValue])
+                    i += 1
+                sql = "INSERT INTO `metagame_graphs`" \
+                      "(`year`, `month`, `format`, `elo`, `key`, `value`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s)"
                 cursor.executemany(sql, data)
 
             # connection is not autocommit by default. So you must commit to save
