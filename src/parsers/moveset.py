@@ -92,12 +92,12 @@ class MovesetFile(TextPage):
             if matches.groups()[7] == "Other":
                 spread['is_other'] = True
                 spread['nature'] = "Other"
-                spread['hp'] = 0
-                spread['atk'] = 0
-                spread['def'] = 0
-                spread['spa'] = 0
-                spread['spd'] = 0
-                spread['spe'] = 0
+                spread['hp'] = None
+                spread['atk'] = None
+                spread['def'] = None
+                spread['spa'] = None
+                spread['spd'] = None
+                spread['spe'] = None
             else:
                 spread['is_other'] = False
                 spread['nature'] = matches.groups()[0].strip()

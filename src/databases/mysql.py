@@ -161,7 +161,7 @@ class MySQL(DataBase):
                     data = [
                         [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
                          item['name'], item['percentage']
-                         ] for item in pokemon['items']]
+                         ] for item in pokemon['items'] if item['name'] != "Other"]
                     sql = "INSERT INTO `moveset_items`" \
                           "(`year`, `month`, `format`, `elo`, `pokemon`, `item`, `percentage`)" \
                           " VALUES " \
@@ -173,7 +173,7 @@ class MySQL(DataBase):
                         [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
                          spread['nature'], spread['hp'], spread['atk'], spread['def'],
                          spread['spa'], spread['spd'], spread['spe'], spread['percentage']
-                         ] for spread in pokemon['spreads']]
+                         ] for spread in pokemon['spreads'] if spread['nature'] != "Other"]
                     sql = "INSERT INTO `moveset_spreads`" \
                           "(`year`, `month`, `format`, `elo`, `pokemon`, `nature`, " \
                           "`hp`, `atk`, `def`, `spa`, `spd`, `spe`, `percentage`)" \
@@ -185,7 +185,7 @@ class MySQL(DataBase):
                     data = [
                         [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
                          move['name'], move['percentage']
-                         ] for move in pokemon['moves']]
+                         ] for move in pokemon['moves'] if move['name'] != "Other"]
                     sql = "INSERT INTO `moveset_moves`" \
                           "(`year`, `month`, `format`, `elo`, `pokemon`, `move`, `percentage`)" \
                           " VALUES " \
@@ -196,7 +196,7 @@ class MySQL(DataBase):
                     data = [
                         [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
                          teammate['name'], teammate['percentage']
-                         ] for teammate in pokemon['teammates']]
+                         ] for teammate in pokemon['teammates'] if teammate['name'] != "Other"]
                     sql = "INSERT INTO `moveset_teammates`" \
                           "(`year`, `month`, `format`, `elo`, `pokemon`, `teammate`, `percentage`)" \
                           " VALUES " \
