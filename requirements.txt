@@ -1,2 +1,3 @@
 PyMySQL==0.7.9
 redgreenunittest==0.1.1
+ujson==1.35

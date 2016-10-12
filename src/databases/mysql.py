@@ -131,3 +131,92 @@ class MySQL(DataBase):
             self.connection.commit()
         finally:
             self.connection.close()
+
+
+    def fillMoveset(self, movesetFile):
+        try:
+            with self.connection.cursor() as cursor: # For each Pokemon
+                for pokemon in movesetFile.data:
+                    # Insert general values into `moveset` table
+                    data = (movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo,
+                            pokemon['name'], pokemon['raw_count'], pokemon['avg_weight'], pokemon['viability_ceiling'])
+                    sql = "INSERT INTO `moveset`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `raw_count`, `avg_weight`, `viability_ceiling`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s, %s)"
+                    cursor.execute(sql, data)
+
+                    # Insert each value into `moveset_abilities` table
+                    data = [
+                        [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
+                         ability['name'], ability['percentage']
+                         ] for ability in pokemon['abilities']]
+                    sql = "INSERT INTO `moveset_abilities`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `ability`, `percentage`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, data)
+
+                    # Insert each value into `moveset_items` table
+                    data = [
+                        [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
+                         item['name'], item['percentage']
+                         ] for item in pokemon['items']]
+                    sql = "INSERT INTO `moveset_items`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `item`, `percentage`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, data)
+
+                    # Insert each value into `moveset_spreads` table
+                    data = [
+                        [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
+                         spread['nature'], spread['hp'], spread['atk'], spread['def'],
+                         spread['spa'], spread['spd'], spread['spe'], spread['percentage']
+                         ] for spread in pokemon['spreads']]
+                    sql = "INSERT INTO `moveset_spreads`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `nature`, " \
+                          "`hp`, `atk`, `def`, `spa`, `spd`, `spe`, `percentage`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, data)
+
+                    # Insert each value into `moveset_moves` table
+                    data = [
+                        [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
+                         move['name'], move['percentage']
+                         ] for move in pokemon['moves']]
+                    sql = "INSERT INTO `moveset_moves`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `move`, `percentage`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, data)
+
+                    # Insert each value into `moveset_teammates` table
+                    data = [
+                        [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
+                         teammate['name'], teammate['percentage']
+                         ] for teammate in pokemon['teammates']]
+                    sql = "INSERT INTO `moveset_teammates`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `teammate`, `percentage`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, data)
+
+                    # Insert each value into `moveset_counters` table
+                    data = [
+                        [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name'],
+                         counter['name'], counter['number1'], counter['number2'], counter['number3'], counter['koed'], counter['switched_out']
+                         ] for counter in pokemon['counters']]
+                    sql = "INSERT INTO `moveset_counters`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `counter`, `percentage`, " \
+                          "`number2`, `number3`, `koed`, `switched_out`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, data)
+
+            # connection is not autocommit by default. So you must commit to save
+            # your changes.
+            self.connection.commit()
+        finally:
+            self.connection.close()

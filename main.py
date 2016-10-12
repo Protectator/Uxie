@@ -12,6 +12,7 @@ from src.databases.mysql import *
 from src.parsers.usage import *
 from src.parsers.leads import *
 from src.parsers.metagame import *
+from src.parsers.moveset import *
 # Fill DB
 
 # Execute
@@ -27,10 +28,12 @@ from src.parsers.metagame import *
 # page.parse()
 # page = LeadsFile('stats/2016-08/leads/uu-0.txt')
 # page.parse()
-page = MetagameFile('stats/2016-08/metagame/uu-0.txt')
+# page = MetagameFile('stats/2016-08/metagame/uu-0.txt')
+# page.parse()
+page = MovesetFile('stats/2016-08/moveset/uu-0.txt')
 page.parse()
 
 db = MySQL()
 db.connect()
 db.initialize()
-db.fillMetagame(page)
+db.fillMoveset(page)
