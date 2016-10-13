@@ -18,11 +18,11 @@ class MySQL(DataBase):
         DataBase.__init__(self)
         self.connection = None
 
-    def connect(self):
-        self.connection = pymysql.connect(host='localhost',
-                                          user='uxie',
-                                          password='uxie',
-                                          db='uxie',
+    def connect(self, host, user, password, db):
+        self.connection = pymysql.connect(host=host,
+                                          user=user,
+                                          password=password,
+                                          db=db,
                                           charset='utf8mb4',
                                           cursorclass=pymysql.cursors.DictCursor)
 
