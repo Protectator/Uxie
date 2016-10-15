@@ -13,6 +13,7 @@ import os
 import re
 import requests
 import urlparse
+import codecs
 from HTMLParser import HTMLParser
 from threading import Thread, Semaphore
 
@@ -21,9 +22,17 @@ from src.progressbar import *
 
 
 def downloadFile(url):
-    r = requests.get(BASE_URL + url)
-    fileContent = r.text
-    return fileContent.strip(), len(fileContent)
+    tries = 0
+    while tries < 3:
+        try:
+            r = requests.get(BASE_URL + url)
+            r.encoding = "utf-8"
+            fileContent = r.text
+            return fileContent.strip(), len(fileContent)
+        except (requests.ConnectionError, requests.ConnectTimeout) as e:
+            tries += 1
+            if tries >= 3:
+                raise e
 
 
 def shouldDownload(url):
@@ -94,7 +103,7 @@ class Crawler:
             except OSError as exc:
                 if exc.errno != errno.EEXIST:
                     raise
-        with open(filePath, "w+") as newFile:
+        with codecs.open(filePath, "w+", "utf-8") as newFile:
             newFile.write(content)
 
         self.mutex.acquire()

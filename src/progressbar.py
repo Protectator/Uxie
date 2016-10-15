@@ -16,7 +16,7 @@ class ProgressBar:
         self.progress = 0
         self.unit = 'Mo'
         self.divider = 1024 * 1024
-        self.length = 80
+        self.length = 60
         self.max = maxProgress
         self.up = '█'
         self.down = '.'
