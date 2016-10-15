@@ -52,10 +52,11 @@ class MovesetFile(TextPage):
                 self.currentPokemon['raw_count'] = int(
                     self.currentLine.split('|')[1].strip().split(': ')[1])  # ' | Raw count: 4 |  '
             elif "Avg. weight: " in self.currentLine:
-                self.currentPokemon['avg_weight'] = float(
-                    self.currentLine.split('|')[1].strip().split(': ')[1])  # ' | Avg. weight: 0.4 |  '
+                if "---" not in self.currentLine:
+                    self.currentPokemon['avg_weight'] = float(
+                        self.currentLine.split('|')[1].strip().split(': ')[1])  # ' | Avg. weight: 0.4 |  '
             elif "Viability Ceiling:" in self.currentLine:
-                self.currentPokemon['viability_ceiling'] = float(
+                self.currentPokemon['viability_ceiling'] = int(
                     self.currentLine.split('|')[1].strip().split(': ')[1])  # ' | Viability Ceiling: 4 |  '
             else:
                 raise RuntimeError('Line not recognized : ' + self.currentLine)
@@ -66,7 +67,7 @@ class MovesetFile(TextPage):
         self.currentPokemon['abilities'] = []
         while "+--" not in self.currentLine:
             ability = {}
-            matches = re.search('^ \| ([^|]+) +([\d.]+)%', self.currentLine)  # ' | Gale Wings 67.393% | '
+            matches = re.search('^ \| ([^|]+) +(-?[\d.]+)%', self.currentLine)  # ' | Gale Wings 67.393% | '
             ability['name'] = matches.groups()[0].strip()
             ability['percentage'] = float(matches.groups()[1])
             self.currentPokemon['abilities'].append(ability)
@@ -77,7 +78,7 @@ class MovesetFile(TextPage):
         self.currentPokemon['items'] = []
         while "+--" not in self.nextLine():
             item = {}
-            matches = re.search('^ \| ([^|]+) +([\d.]+)%', self.currentLine)  # ' | Rocky Helmet 16.875% | '
+            matches = re.search('^ \| ([^|]+) +(-?[\d.]+)%', self.currentLine)  # ' | Rocky Helmet 16.875% | '
             item['name'] = matches.groups()[0].strip()
             item['percentage'] = float(matches.groups()[1])
             self.currentPokemon['items'].append(item)
@@ -87,7 +88,7 @@ class MovesetFile(TextPage):
         self.currentPokemon['spreads'] = []
         while "+--" not in self.nextLine():
             spread = {}
-            matches = re.search('^ \| (?:(\w+):(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)|(Other)) +([\d.]+)%',
+            matches = re.search('^ \| (?:(\w+):(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)\/(\d+)|(Other)) +(-?[\d.]+)%',
                                 self.currentLine)  # ' | Timid:0/0/0/252/4/252 58.111% | '
             if matches.groups()[7] == "Other":
                 spread['is_other'] = True
@@ -115,7 +116,7 @@ class MovesetFile(TextPage):
         self.currentPokemon['moves'] = []
         while "+--" not in self.nextLine():
             move = {}
-            matches = re.search('^ \| ([^|]+) +([\d.]+)%', self.currentLine)  # ' | Brave Bird 99.882% | '
+            matches = re.search('^ \| ([^|]+) +(-?[\d.]+)%', self.currentLine)  # ' | Brave Bird 99.882% | '
             move['name'] = matches.groups()[0].strip()
             move['percentage'] = float(matches.groups()[1])
             self.currentPokemon['moves'].append(move)
@@ -141,7 +142,7 @@ class MovesetFile(TextPage):
             counter['number1'] = float(matches.groups()[1])
             counter['number2'] = float(matches.groups()[2])
             counter['number3'] = float(matches.groups()[3])
-            matches2 = re.search('^ \|\s+\(([\d.]+)%.+/\s+([\d.]+)%',
+            matches2 = re.search('^ \|\s+\(([\d.]+)%.+/\s+(-?[\d.]+)%',
                                  self.nextLine())  # ' | (28.9% KOed / 47.3% switched out)| '
             counter['koed'] = float(matches2.groups()[0])
             counter['switched_out'] = float(matches2.groups()[1])

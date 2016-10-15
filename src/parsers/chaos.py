@@ -12,4 +12,9 @@ from src.parsers.textfile import *
 
 
 class ChaosFile(TextPage):
-    pass
+    def __init__(self, path):
+        TextPage.__init__(self, path)
+        self.file = None
+
+    def parse(self):
+        return None # TODO : Implement
