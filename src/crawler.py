@@ -11,7 +11,7 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 import errno
 import os
 import re
-import urllib2
+import requests
 import urlparse
 from HTMLParser import HTMLParser
 from threading import Thread, Semaphore
@@ -21,8 +21,8 @@ from src.progressbar import *
 
 
 def downloadFile(url):
-    index = urllib2.urlopen(BASE_URL + url)
-    fileContent = index.read()
+    r = requests.get(BASE_URL + url)
+    fileContent = r.text
     return fileContent.strip(), len(fileContent)
 
 
