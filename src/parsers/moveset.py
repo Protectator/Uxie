@@ -30,16 +30,21 @@ class MovesetFile(TextPage):
         return self.currentLine
 
     def parseLine(self):
-        self.currentPokemon = {}
-        self.parseName()
-        self.parseCount()
-        self.parseAbilities()
-        self.parseItems()
-        self.parseSpreads()
-        self.parseMoves()
-        self.parseTeammates()
-        self.parseCounters()
-        self.data.append(self.currentPokemon)
+        try:
+            self.currentPokemon = {}
+            self.parseName()
+            self.parseCount()
+            self.parseAbilities()
+            self.parseItems()
+            self.parseSpreads()
+            self.parseMoves()
+            self.parseTeammates()
+            self.parseCounters()
+            self.data.append(self.currentPokemon)
+        except AttributeError: # Halt execution if file is incomplete. e.g. /stats/2015-07/moveset/anythinggoes-1630.txt
+            if self.currentLine is None or self.currentLine == "":
+                return
+
 
     def parseName(self):
         self.currentPokemon['name'] = self.nextLine().split('|')[1].strip()  # ' | Skarmory | '
