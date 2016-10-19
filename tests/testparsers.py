@@ -113,4 +113,5 @@ class LeadsTest(unittest.TestCase):
 
 class ChaosTest(unittest.TestCase):
     def test_parse(self):
-        pass
+        chaos_file = ChaosFile('tests/textfiles/2016-08/chaos/battlespotspecial17-0.json')
+        result = chaos_file.parse()

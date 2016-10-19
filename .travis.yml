@@ -1,7 +1,12 @@
 language: python
 python:
   - "2.7"
+services:
+  - mysql
 install:
   - pip install -r requirements.txt
-# command to run tests
+before_script:
+  - mysql -u root -e "CREATE DATABASE uxie;"
+  - mysql -u root -e "CREATE USER 'uxie'@'localhost' IDENTIFIED BY 'uxie';"
+  - mysql -u root -e "GRANT ALL ON uxie.* TO 'uxie'@'localhost';"
 script: python test.py
