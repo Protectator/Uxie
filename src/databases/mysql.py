@@ -33,6 +33,21 @@ class MySQL(DataBase):
             cursor.execute(sql)
         self.connection.commit()
 
+    """
+    # I tried. It doesn't work of course, but might be useful once later.
+    def prepareInsert(self, table, columns):
+        sql = "INSERT IGNORE INTO `" + table + "` ("
+        values = " VALUES ("
+        array = []
+        first = True
+        for key in columns:
+            sql += ("`" + key + "`" if first else ", `" + key + "`")
+            values += ("%s" if first else ", %s")
+            array.append(columns[key])
+            first = False
+        sql = sql + ")" + values + ")"
+        return sql, array"""
+
     def fillUsage(self, usageFile):
         with self.connection.cursor() as cursor:
             # Insert general values into `usage` table
@@ -220,9 +235,22 @@ class MySQL(DataBase):
                       "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 cursor.executemany(sql, data)
 
-        # connection is not autocommit by default. So you must commit to save
-        # your changes.
         self.connection.commit()
 
     def fillChaos(self, chaosFile):
-        pass # TODO : Implement
+        with self.connection.cursor() as cursor:
+            info = chaosFile.data['info']
+            data = chaosFile.data['data']
+
+            data = [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, info['cutoff'],
+                    info['cutoff deviation'], info['metagame'], info['number of battles']]
+            sql = "INSERT IGNORE INTO `chaos_info`" \
+                  "(`year`, `month`, `format`, `elo`, `cutoff`, `cutoff_deviation`, `metagame`, `number_battles`)" \
+                  " VALUES " \
+                  "(%s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql, data)
+
+            # for name, pokemon in data:
+                # pass
+
+        self.connection.commit()

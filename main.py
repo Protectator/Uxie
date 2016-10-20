@@ -38,5 +38,5 @@ if not args.only_parse:
     crawler.run()
 
 # Phase 2 : Parse
-feeder = Feeder('.')
+feeder = Feeder('stats')
 feeder.feedAll(args.dbms, args.host, args.user, args.password, args.dbname)

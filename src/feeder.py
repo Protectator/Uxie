@@ -30,7 +30,7 @@ class Feeder():
         print "Initializing tables"
         db.initialize()
         print "Parsing files"
-        for root, dirs, files in os.walk("stats", topdown=False):
+        for root, dirs, files in os.walk(self.folder, topdown=False):
             for filePath in files:
                 path = "/".join(os.path.join(root, filePath).split(os.sep))
                 if os.path.getsize(path) == 0:

@@ -12,6 +12,7 @@ import sys
 import redgreenunittest as unittest
 from tests.testparsers import UsageTest, MetagameTest, MovesetTest, LeadsTest, ChaosTest
 from tests.testdatabases import MysqlTest
+from tests.testfeeder import FeederTest
 
 def suite():
     return unittest.TestSuite((
@@ -20,7 +21,8 @@ def suite():
         unittest.makeSuite(MovesetTest),
         unittest.makeSuite(LeadsTest),
         unittest.makeSuite(ChaosTest),
-        unittest.makeSuite(MysqlTest)
+        unittest.makeSuite(MysqlTest),
+        unittest.makeSuite(FeederTest)
     ))
 
 if __name__ == '__main__':
