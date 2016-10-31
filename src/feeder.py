@@ -24,19 +24,19 @@ class Feeder():
 
     def feedAll(self, dbms, host, user, password, dbname):
         # Phase 3 : Fill DB
-        print "Connecting to database"
+        print("Connecting to database")
         db = MySQL()
         db.connect(host, user, password, dbname)
-        print "Initializing tables"
+        print("Initializing tables")
         db.initialize()
-        print "Parsing files"
+        print("Parsing files")
         for root, dirs, files in os.walk(self.folder, topdown=False):
             for filePath in files:
                 path = "/".join(os.path.join(root, filePath).split(os.sep))
                 if os.path.getsize(path) == 0:
                     continue
                 file = TextPage(path)
-                print "Parsing file " + path
+                print("Parsing file " + path)
                 type = file.folders
                 if type is None:
                     parser = UsageFile(path)

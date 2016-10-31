@@ -14,5 +14,6 @@ from src.feeder import Feeder
 
 class FeederTest(unittest.TestCase):
     def test_feed(self):
+        print("Testing feeder")
         feeder = Feeder('tests' + os.sep + 'textfiles')
         feeder.feedAll('mysql', 'localhost', 'uxie', 'uxie', 'uxie')

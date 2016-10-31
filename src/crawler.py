@@ -12,9 +12,14 @@ import errno
 import os
 import re
 import requests
-import urlparse
 import codecs
-from HTMLParser import HTMLParser
+try:
+    from HTMLParser import HTMLParser
+    import urlparse
+except ImportError:
+    from urllib.parse import urlparse
+    from html.parser import HTMLParser
+
 from threading import Thread, Semaphore
 
 from src.constants import *
@@ -71,7 +76,7 @@ class Crawler:
             if shouldDownload(finalUrl):
                 self.downloadFolder(finalUrl)
             else:
-                print "Ignoring download of " + link
+                print("Ignoring download of " + link)
 
         self.nbFiles = len(folder.files)
         self.finished = 0
@@ -81,7 +86,7 @@ class Crawler:
         self.bar = ProgressBar(self.nbFiles)
 
         if self.nbFiles > 0:
-            print "/" + url + " : " + str(self.nbFiles) + " files to download."
+            print("/" + url + " : " + str(self.nbFiles) + " files to download.")
             for link in folder.files:
                 finalUrl = url + link
                 self.threads[finalUrl] = Thread(target=self.downloadText, args=[finalUrl])
@@ -113,7 +118,7 @@ class Crawler:
         self.mutex.release()
         if self.finished == self.nbFiles:
             self.barrier.release()
-            print "Downloaded " + str(self.finished) + " files."
+            print("Downloaded " + str(self.finished) + " files.")
 
 
 class FolderPage(HTMLParser):
