@@ -17,4 +17,4 @@ class MysqlTest(unittest.TestCase):
         db = MySQL()
         db.connect('localhost', 'uxie', 'uxie', 'uxie')
         db.initialize()
-        print "DB initialized"
+        print("DB initialized")

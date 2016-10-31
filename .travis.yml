@@ -1,6 +1,7 @@
 language: python
 python:
   - "2.7"
+  - "3.5"
 services:
   - mysql
 install:
@@ -9,4 +10,4 @@ before_script:
   - mysql -u root -e "CREATE DATABASE uxie;"
   - mysql -u root -e "CREATE USER 'uxie'@'localhost' IDENTIFIED BY 'uxie';"
   - mysql -u root -e "GRANT ALL ON uxie.* TO 'uxie'@'localhost';"
-script: python test.py
+script: python -m unittest discover tests
