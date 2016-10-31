@@ -16,12 +16,12 @@ from tests.testfeeder import FeederTest
 
 def suite():
     return unittest.TestSuite((
+        unittest.makeSuite(MysqlTest),
         unittest.makeSuite(UsageTest),
         unittest.makeSuite(MetagameTest),
         unittest.makeSuite(MovesetTest),
         unittest.makeSuite(LeadsTest),
         unittest.makeSuite(ChaosTest),
-        unittest.makeSuite(MysqlTest),
         unittest.makeSuite(FeederTest)
     ))
 

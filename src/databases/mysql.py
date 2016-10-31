@@ -242,15 +242,105 @@ class MySQL(DataBase):
             info = chaosFile.data['info']
             data = chaosFile.data['data']
 
-            data = [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, info['cutoff'],
+            # Table `chaos`
+            array = [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, info['cutoff'],
                     info['cutoff deviation'], info['metagame'], info['number of battles']]
-            sql = "INSERT IGNORE INTO `chaos_info`" \
+            sql = "INSERT IGNORE INTO `chaos`" \
                   "(`year`, `month`, `format`, `elo`, `cutoff`, `cutoff_deviation`, `metagame`, `number_battles`)" \
                   " VALUES " \
                   "(%s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, data)
+            cursor.execute(sql, array)
 
-            # for name, pokemon in data:
-                # pass
+            # Table `chaos_pokemon`
+            array = [
+                [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, data[pokemon]['Raw count'],
+                 data[pokemon]['usage'], data[pokemon]['Viability Ceiling'][0], data[pokemon]['Viability Ceiling'][1],
+                 data[pokemon]['Viability Ceiling'][2], data[pokemon]['Viability Ceiling'][3]
+                 ] for pokemon in data]
+            sql = "INSERT IGNORE INTO `chaos_pokemon`" \
+                  "(`year`, `month`, `format`, `elo`, `pokemon`, `raw_count`, " \
+                  "`usage`, `viability_ceiling1`, `viability_ceiling2`, `viability_ceiling3`, `viability_ceiling4`)" \
+                  " VALUES " \
+                  "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.executemany(sql, array)
+
+            # Table `chaos_ablities`
+            for pokemon in data:
+                array = [
+                    [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, ability,
+                     data[pokemon]['Abilities'][ability]
+                     ] for ability in data[pokemon]['Abilities']]
+                sql = "INSERT IGNORE INTO `chaos_abilities`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `ability`, `raw_count`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, array)
+
+            # Table `chaos_counters`
+            for pokemon in data:
+                array = [
+                    [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, counter,
+                     data[pokemon]['Checks and Counters'][counter][0],
+                     data[pokemon]['Checks and Counters'][counter][1],
+                     data[pokemon]['Checks and Counters'][counter][2],
+                     ] for counter in data[pokemon]['Checks and Counters']]
+                sql = "INSERT IGNORE INTO `chaos_counters`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `counter`, `number1`, `number2`, `number3`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, array)
+
+            # Table `chaos_happiness`
+            for pokemon in data:
+                array = [
+                    [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, value,
+                     data[pokemon]['Happiness'][value]
+                     ] for value in data[pokemon]['Happiness']]
+                sql = "INSERT IGNORE INTO `chaos_happiness`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `value`, `raw_count`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, array)
+
+            # Table `chaos_items`
+            for pokemon in data:
+                array = [
+                    [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, item,
+                     data[pokemon]['Items'][item]
+                     ] for item in data[pokemon]['Items']]
+                sql = "INSERT IGNORE INTO `chaos_items`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `item`, `raw_count`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, array)
+
+            # Table `chaos_moves`
+            for pokemon in data:
+                array = [
+                    [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, move,
+                     data[pokemon]['Moves'][move]
+                     ] for move in data[pokemon]['Moves']]
+                sql = "INSERT IGNORE INTO `chaos_moves`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `move`, `raw_count`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, array)
+
+            # Table `chaos_spreads`
+            for pokemon in data:
+                final_array = []
+                for spread in data[pokemon]['Spreads']:
+                    raw_count = data[pokemon]['Spreads'][spread]
+                    parts = spread.split(':')
+                    evs = parts[1].split('/')
+                    array = [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, parts[0], evs[0],
+                             evs[1], evs[2], evs[3], evs[4], evs[5], raw_count]
+                    final_array.append(array)
+                sql = "INSERT IGNORE INTO `chaos_spreads`" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `nature`, `hp`, `atk`, `def`, `spa`, `spd`," \
+                      "`spe`,`raw_count`)" \
+                      " VALUES " \
+                      "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.executemany(sql, final_array)
 
         self.connection.commit()

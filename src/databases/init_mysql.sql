@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `chaos_moves`;
 DROP TABLE IF EXISTS `chaos_teammates`;
 DROP TABLE IF EXISTS `chaos_counters`;
 DROP TABLE IF EXISTS `chaos_happiness`;
-DROP TABLE IF EXISTS `chaos_info`;
+DROP TABLE IF EXISTS `chaos_pokemon`;
 DROP TABLE IF EXISTS `chaos`;
 DROP TABLE IF EXISTS `metagame_graphs`;
 DROP TABLE IF EXISTS `metagame_usages`;
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `leads_pokemons` (
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `chaos_info` (
+CREATE TABLE `chaos` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` varchar(31) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE `chaos_info` (
   PRIMARY KEY (`year`,`month`,`format`,`elo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `chaos` (
+CREATE TABLE `chaos_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` varchar(31) NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE `chaos_abilities` (
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `ability`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -121,7 +121,7 @@ CREATE TABLE `chaos_items` (
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `item`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -141,7 +141,7 @@ CREATE TABLE `chaos_spreads` (
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `nature`, `hp`, `atk`, `def`, `spa`, `spd`, `spe`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -155,7 +155,7 @@ CREATE TABLE `chaos_moves` (
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `move`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -169,7 +169,7 @@ CREATE TABLE `chaos_teammates` (
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `teammate`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -183,25 +183,23 @@ CREATE TABLE `chaos_happiness` (
   `raw_count` INT UNSIGNED NOT NULL,
   KEY (`year`,`month`,`format`,`elo`,`pokemon`, `value`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `chaos_counters` ( # To verfiy
+CREATE TABLE `chaos_counters` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` varchar(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` varchar(31) NOT NULL,
   `counter` varchar(31) NOT NULL,
-  `percentage` DECIMAL(6,3) NOT NULL,
-  `number2` DECIMAL(5,2) NOT NULL,
-  `number3` DECIMAL(5,2) NOT NULL,
-  `koed` DECIMAL(4,1) NOT NULL,
-  `switched_out` DECIMAL(4,1) NOT NULL,
+  `number1` DECIMAL(15,14) NOT NULL,
+  `number2` DECIMAL(15,14) NOT NULL,
+  `number3` DECIMAL(15,14) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `counter`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES chaos(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
