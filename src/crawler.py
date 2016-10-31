@@ -13,11 +13,13 @@ import os
 import re
 import requests
 import codecs
+import time
+
 try:
     from HTMLParser import HTMLParser
-    import urlparse
+    from urlparse import urlsplit
 except ImportError:
-    from urllib.parse import urlparse
+    from urllib.parse import urlsplit
     from html.parser import HTMLParser
 
 from threading import Thread, Semaphore
@@ -91,14 +93,16 @@ class Crawler:
                 finalUrl = url + link
                 self.threads[finalUrl] = Thread(target=self.downloadText, args=[finalUrl])
                 self.threads[finalUrl].setName(finalUrl)
+                self.threads[finalUrl].daemon=True
                 self.threads[finalUrl].start()
-
-            self.barrier.acquire()
+            #TODO: make this better
+            while not self.barrier.acquire(False):
+                time.sleep(1)
             self.barrier.release()
 
     def downloadText(self, url):
         (content, size) = downloadFile(url)
-        path = urlparse.urlsplit(url)[2]
+        path = urlsplit(url)[2]
 
         filePath = FOLDER_TO_SAVE + "/" + path
 

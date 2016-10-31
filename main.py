@@ -32,7 +32,6 @@ parser.add_argument("-v", "--verbose", help="be verbose", action="store_true")
 args = parser.parse_args()
 
 # Phase 1 : Download
-print(args)
 if not args.only_parse:
     crawler = Crawler('')
     crawler.run()
