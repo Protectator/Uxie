@@ -89,11 +89,11 @@ CREATE TABLE `chaos_pokemon` (
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
-  `usage` FLOAT NOT NULL,
-  `viability_ceiling1` SMALLINT UNSIGNED NOT NULL,
-  `viability_ceiling2` SMALLINT UNSIGNED NOT NULL,
-  `viability_ceiling3` SMALLINT UNSIGNED NOT NULL,
-  `viability_ceiling4` SMALLINT UNSIGNED NOT NULL,
+  `usage` FLOAT,
+  `viability_ceiling1` SMALLINT UNSIGNED,
+  `viability_ceiling2` SMALLINT UNSIGNED,
+  `viability_ceiling3` SMALLINT UNSIGNED,
+  `viability_ceiling4` SMALLINT UNSIGNED,
     PRIMARY KEY (`year`,`month`,`format`,`elo`, `pokemon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

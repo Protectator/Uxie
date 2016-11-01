@@ -254,8 +254,11 @@ class MySQL(DataBase):
             # Table `chaos_pokemon`
             array = [
                 [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, data[pokemon]['Raw count'],
-                 data[pokemon]['usage'], data[pokemon]['Viability Ceiling'][0], data[pokemon]['Viability Ceiling'][1],
-                 data[pokemon]['Viability Ceiling'][2], data[pokemon]['Viability Ceiling'][3]
+                 data[pokemon]['usage'] if 'usage' in data[pokemon] else None,
+                 data[pokemon]['Viability Ceiling'][0] if 'Viability Ceiling' in data[pokemon] else None,
+                 data[pokemon]['Viability Ceiling'][1] if 'Viability Ceiling' in data[pokemon] else None,
+                 data[pokemon]['Viability Ceiling'][2] if 'Viability Ceiling' in data[pokemon] else None,
+                 data[pokemon]['Viability Ceiling'][3] if 'Viability Ceiling' in data[pokemon] else None
                  ] for pokemon in data]
             sql = "INSERT IGNORE INTO `chaos_pokemon`" \
                   "(`year`, `month`, `format`, `elo`, `pokemon`, `raw_count`, " \
