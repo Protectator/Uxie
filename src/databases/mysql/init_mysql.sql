@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS `usage_pokemons`;
+DROP TABLE IF EXISTS `usage_pokemon`;
 DROP TABLE IF EXISTS `usage`;
-DROP TABLE IF EXISTS `leads_pokemons`;
+DROP TABLE IF EXISTS `leads_pokemon`;
 DROP TABLE IF EXISTS `leads`;
 DROP TABLE IF EXISTS `moveset_abilities`;
 DROP TABLE IF EXISTS `moveset_items`;
@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `moveset_spreads`;
 DROP TABLE IF EXISTS `moveset_moves`;
 DROP TABLE IF EXISTS `moveset_teammates`;
 DROP TABLE IF EXISTS `moveset_counters`;
-DROP TABLE IF EXISTS `moveset`;
+DROP TABLE IF EXISTS `moveset_pokemon`;
 DROP TABLE IF EXISTS `chaos_abilities`;
 DROP TABLE IF EXISTS `chaos_items`;
 DROP TABLE IF EXISTS `chaos_spreads`;
@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS `chaos`;
 DROP TABLE IF EXISTS `metagame_graphs`;
 DROP TABLE IF EXISTS `metagame_usages`;
 
-CREATE TABLE IF NOT EXISTS `usage` (
+CREATE TABLE `usage` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` VARCHAR(31) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `usage` (
   PRIMARY KEY (`year`,`month`,`format`,`elo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `usage_pokemons` (
+CREATE TABLE `usage_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` VARCHAR(31) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `usage_pokemons` (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `leads` (
+CREATE TABLE `leads` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` VARCHAR(31) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `leads` (
   PRIMARY KEY (`year`,`month`,`format`,`elo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `leads_pokemons` (
+CREATE TABLE `leads_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
   `format` VARCHAR(31) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `leads_pokemons` (
 CREATE TABLE `chaos` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `team_type` VARCHAR(31),
   `cutoff` FLOAT NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE `chaos` (
 CREATE TABLE `chaos_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
@@ -100,10 +100,10 @@ CREATE TABLE `chaos_pokemon` (
 CREATE TABLE `chaos_abilities` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `ability` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `ability` VARCHAR(31) NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `ability`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
@@ -114,10 +114,10 @@ CREATE TABLE `chaos_abilities` (
 CREATE TABLE `chaos_items` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `item` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `item` VARCHAR(31) NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `item`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
@@ -128,16 +128,16 @@ CREATE TABLE `chaos_items` (
 CREATE TABLE `chaos_spreads` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `nature` varchar(15) NOT NULL,
-  `hp` tinyint unsigned NOT NULL,
-  `atk` tinyint unsigned NOT NULL,
-  `def` tinyint unsigned NOT NULL,
-  `spa` tinyint unsigned NOT NULL,
-  `spd` tinyint unsigned NOT NULL,
-  `spe` tinyint unsigned NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `nature` VARCHAR(15) NOT NULL,
+  `hp` TINYINT UNSIGNED NOT NULL,
+  `atk` TINYINT UNSIGNED NOT NULL,
+  `def` TINYINT UNSIGNED NOT NULL,
+  `spa` TINYINT UNSIGNED NOT NULL,
+  `spd` TINYINT UNSIGNED NOT NULL,
+  `spe` TINYINT UNSIGNED NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `nature`, `hp`, `atk`, `def`, `spa`, `spd`, `spe`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
@@ -148,10 +148,10 @@ CREATE TABLE `chaos_spreads` (
 CREATE TABLE `chaos_moves` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `move` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `move` VARCHAR(31) NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `move`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
@@ -162,10 +162,10 @@ CREATE TABLE `chaos_moves` (
 CREATE TABLE `chaos_teammates` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `teammate` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `teammate` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `teammate`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
@@ -176,9 +176,9 @@ CREATE TABLE `chaos_teammates` (
 CREATE TABLE `chaos_happiness` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
   `value` TINYINT UNSIGNED NOT NULL,
   `raw_count` INT UNSIGNED NOT NULL,
   KEY (`year`,`month`,`format`,`elo`,`pokemon`, `value`),
@@ -190,10 +190,10 @@ CREATE TABLE `chaos_happiness` (
 CREATE TABLE `chaos_counters` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `counter` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `counter` VARCHAR(31) NOT NULL,
   `number1` DECIMAL(15,14) NOT NULL,
   `number2` DECIMAL(15,14) NOT NULL,
   `number3` DECIMAL(15,14) NOT NULL,
@@ -203,13 +203,13 @@ CREATE TABLE `chaos_counters` (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `moveset` (
+CREATE TABLE `moveset_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `raw_count` int(11) UNSIGNED NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `raw_count` INT(11) UNSIGNED NOT NULL,
   `avg_weight` FLOAT,
   `viability_ceiling` SMALLINT UNSIGNED,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`)
@@ -218,86 +218,86 @@ CREATE TABLE `moveset` (
 CREATE TABLE `moveset_abilities` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `ability` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `ability` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `ability`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES moveset(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES moveset_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_items` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `item` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `item` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `item`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES moveset(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES moveset_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_spreads` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `nature` varchar(15) NOT NULL,
-  `hp` tinyint unsigned NOT NULL,
-  `atk` tinyint unsigned NOT NULL,
-  `def` tinyint unsigned NOT NULL,
-  `spa` tinyint unsigned NOT NULL,
-  `spd` tinyint unsigned NOT NULL,
-  `spe` tinyint unsigned NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `nature` VARCHAR(15) NOT NULL,
+  `hp` TINYINT UNSIGNED NOT NULL,
+  `atk` TINYINT UNSIGNED NOT NULL,
+  `def` TINYINT UNSIGNED NOT NULL,
+  `spa` TINYINT UNSIGNED NOT NULL,
+  `spd` TINYINT UNSIGNED NOT NULL,
+  `spe` TINYINT UNSIGNED NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `nature`, `hp`, `atk`, `def`, `spa`, `spd`, `spe`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES moveset(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES moveset_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_moves` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `move` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `move` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `move`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES moveset(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES moveset_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_teammates` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `teammate` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `teammate` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `teammate`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES moveset(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES moveset_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_counters` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` varchar(31) NOT NULL,
+  `format` VARCHAR(31) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` varchar(31) NOT NULL,
-  `counter` varchar(31) NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `counter` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(6,3) NOT NULL,
   `number2` DECIMAL(5,2) NOT NULL,
   `number3` DECIMAL(5,2) NOT NULL,
@@ -305,7 +305,7 @@ CREATE TABLE `moveset_counters` (
   `switched_out` DECIMAL(4,1) NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `counter`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
-  REFERENCES moveset(`year`,`month`,`format`,`elo`,`pokemon`)
+  REFERENCES moveset_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

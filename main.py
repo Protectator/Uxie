@@ -29,6 +29,7 @@ group.add_argument("-p", "--only-parse", "--skip-download", help="do not downloa
 parser.add_argument("-F", "--folder", help="folder to use to download files into, and to parse from")
 parser.add_argument("-f", "--file", help="only process a single specific file")
 parser.add_argument("-v", "--verbose", help="be verbose", action="store_true")
+parser.add_argument("-i", "--index", help="generate recommended index in database", action="store_true")
 args = parser.parse_args()
 
 # Phase 1 : Download
@@ -37,5 +38,9 @@ if not args.only_parse:
     crawler.run()
 
 # Phase 2 : Parse
-feeder = Feeder('stats')
-feeder.feedAll(args.dbms, args.host, args.user, args.password, args.dbname)
+feeder = Feeder('stats', args.dbms, args.host, args.user, args.password, args.dbname)
+feeder.feedAll()
+
+# Phase 3 : Post-Insertion
+if args.index:
+    feeder.postInsert()

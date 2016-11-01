@@ -33,6 +33,13 @@ class MySQL(DataBase):
             cursor.execute(sql)
         self.connection.commit()
 
+    def postInsert(self):
+        with self.connection.cursor() as cursor:
+            with open("src/databases/mysql/end_mysql.sql", mode='r') as inputFile:
+                sql = inputFile.read()
+            cursor.execute(sql)
+        self.connection.commit()
+
     """
     # I tried. It doesn't work of course, but might be useful once later.
     def prepareInsert(self, table, columns):
@@ -59,12 +66,12 @@ class MySQL(DataBase):
                   "(%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, data)
 
-            # Insert each value into `usage_pokemons` table
+            # Insert each value into `usage_pokemon` table
             data = [
                 [usageFile.year, usageFile.month, usageFile.meta, usageFile.elo, line['name'],
                  line['usage_percent'], line['raw_number'], line['raw_percent'],
                  line['real_number'], line['real_percent']] for line in usageFile.data['usage']]
-            sql = "INSERT INTO `usage_pokemons`" \
+            sql = "INSERT INTO `usage_pokemon`" \
                   "(`year`, `month`, `format`, `elo`, `pokemon`," \
                   " `usage_percent`, `raw_usage`, `raw_percent`," \
                   " `real_usage`, `real_percent`)" \
@@ -88,12 +95,12 @@ class MySQL(DataBase):
                   "(%s, %s, %s, %s, %s)"
             cursor.execute(sql, data)
 
-            # Insert each value into `leads_pokemons` table
+            # Insert each value into `leads_pokemon` table
             data = [
                 [leadsFile.year, leadsFile.month, leadsFile.meta, leadsFile.elo, line['name'],
                  line['usage_percent'], line['raw_number'], line['raw_percent']
                  ] for line in leadsFile.data['usage']]
-            sql = "INSERT INTO `leads_pokemons`" \
+            sql = "INSERT INTO `leads_pokemon`" \
                   "(`year`, `month`, `format`, `elo`, `pokemon`," \
                   " `usage_percent`, `raw_usage`, `raw_percent`)" \
                   " VALUES " \
@@ -142,9 +149,9 @@ class MySQL(DataBase):
     def fillMoveset(self, movesetFile):
         with self.connection.cursor() as cursor: # For each Pokemon
             for pokemon in movesetFile.data:
-                # Insert general values into `moveset` table
+                # Insert general values into `moveset_pokemon` table
                 data = [movesetFile.year, movesetFile.month, movesetFile.meta, movesetFile.elo, pokemon['name']]
-                sql = "INSERT IGNORE INTO `moveset`" \
+                sql = "INSERT IGNORE INTO `moveset_pokemon`" \
                       "(`year`, `month`, `format`, `elo`, `pokemon`, `raw_count`, `avg_weight`, `viability_ceiling`)" \
                       " VALUES " \
                       "(%s, %s, %s, %s, %s"

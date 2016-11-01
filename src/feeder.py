@@ -19,16 +19,20 @@ from src.parsers.usage import *
 
 class Feeder():
 
-    def __init__(self, baseFolder):
+    def __init__(self, baseFolder, dbms, host, user, password, dbname):
         self.folder = baseFolder
+        self.db = MySQL()
+        self.host = host
+        self.user = user
+        self.password = password
+        self.dbname = dbname
 
-    def feedAll(self, dbms, host, user, password, dbname):
+    def feedAll(self):
         # Phase 3 : Fill DB
         print("Connecting to database")
-        db = MySQL()
-        db.connect(host, user, password, dbname)
+        self.db.connect(self.host, self.user, self.password, self.dbname)
         print("Initializing tables")
-        db.initialize()
+        self.db.initialize()
         print("Parsing files")
         for root, dirs, files in os.walk(self.folder, topdown=False):
             for filePath in files:
@@ -41,26 +45,31 @@ class Feeder():
                 if type is None:
                     parser = UsageFile(path)
                     parser.parse()
-                    db.fillUsage(parser)
+                    self.db.fillUsage(parser)
                 elif "leads" in type:
                     parser = LeadsFile(path)
                     parser.parse()
-                    db.fillLeads(parser)
+                    self.db.fillLeads(parser)
                 elif "metagame" in type:
                     parser = MetagameFile(path)
                     parser.parse()
-                    db.fillMetagame(parser)
+                    self.db.fillMetagame(parser)
                 elif "moveset" in type:
                     parser = MovesetFile(path)
                     parser.parse()
-                    db.fillMoveset(parser)
+                    self.db.fillMoveset(parser)
                 elif "chaos" in type:
                     parser = ChaosFile(path)
                     parser.parse()
-                    db.fillChaos(parser)
+                    self.db.fillChaos(parser)
                 else:
                     if type == "mega":
                         continue
                     parser = UsageFile(path)
                     parser.parse()
-                    db.fillUsage(parser)
+                    self.db.fillUsage(parser)
+
+    def postInsert(self):
+        print("Creating Index")
+        self.db.connect(self.host, self.user, self.password, self.dbname)
+        self.db.postInsert()

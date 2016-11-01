@@ -11,3 +11,6 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 class DataBase:
     def __init__(self):
         pass
+
+    def postInsert(self):
+        pass
