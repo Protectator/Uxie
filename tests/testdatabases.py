@@ -10,7 +10,7 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 import unittest
 
-from src.databases.mysql import MySQL
+from src.databases.mysql.mysql import MySQL
 
 class MysqlTest(unittest.TestCase):
     def test_db(self):

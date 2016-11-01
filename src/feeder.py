@@ -10,12 +10,12 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 import os
 
-from src.databases.mysql import *
-from src.parsers.usage import *
+from src.databases.mysql.mysql import *
+from src.parsers.chaos import *
 from src.parsers.leads import *
 from src.parsers.metagame import *
 from src.parsers.moveset import *
-from src.parsers.chaos import *
+from src.parsers.usage import *
 
 class Feeder():
 

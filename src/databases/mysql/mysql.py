@@ -28,7 +28,7 @@ class MySQL(DataBase):
 
     def initialize(self):
         with self.connection.cursor() as cursor:
-            with open("src/databases/init_mysql.sql", mode='r') as inputFile:
+            with open("src/databases/mysql/init_mysql.sql", mode='r') as inputFile:
                 sql = inputFile.read()
             cursor.execute(sql)
         self.connection.commit()
@@ -295,15 +295,17 @@ class MySQL(DataBase):
 
             # Table `chaos_happiness`
             for pokemon in data:
-                array = [
-                    [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon, value,
-                     data[pokemon]['Happiness'][value]
-                     ] for value in data[pokemon]['Happiness']]
-                sql = "INSERT IGNORE INTO `chaos_happiness`" \
-                      "(`year`, `month`, `format`, `elo`, `pokemon`, `value`, `raw_count`)" \
-                      " VALUES " \
-                      "(%s, %s, %s, %s, %s, %s, %s)"
-                cursor.executemany(sql, array)
+                if 'Happiness' in data[pokemon]:
+                    array = [
+                        [chaosFile.year, chaosFile.month, chaosFile.meta, chaosFile.elo, pokemon,
+                         value if 'Happiness' in data[pokemon] else None,
+                         data[pokemon]['Happiness'][value] if 'Happiness' in data[pokemon] else None
+                         ] for value in data[pokemon]['Happiness']]
+                    sql = "INSERT IGNORE INTO `chaos_happiness`" \
+                          "(`year`, `month`, `format`, `elo`, `pokemon`, `value`, `raw_count`)" \
+                          " VALUES " \
+                          "(%s, %s, %s, %s, %s, %s, %s)"
+                    cursor.executemany(sql, array)
 
             # Table `chaos_items`
             for pokemon in data:
