@@ -14,6 +14,7 @@ import re
 import requests
 import codecs
 import time
+import logging
 
 try:
     from HTMLParser import HTMLParser
@@ -65,6 +66,7 @@ class Crawler:
         self.barrier = Semaphore(0)
         self.nbFiles = 0
         self.bar = ProgressBar(0)
+        self.log = logging.getLogger('main')
 
     def run(self):
         self.downloadFolder(self.index)
@@ -78,7 +80,7 @@ class Crawler:
             if shouldDownload(finalUrl):
                 self.downloadFolder(finalUrl)
             else:
-                print("Ignoring download of " + link)
+                self.log.info("Ignoring download of " + link)
 
         self.nbFiles = len(folder.files)
         self.finished = 0
@@ -88,14 +90,14 @@ class Crawler:
         self.bar = ProgressBar(self.nbFiles)
 
         if self.nbFiles > 0:
-            print("/" + url + " : " + str(self.nbFiles) + " files to download.")
+            self.log.info("/" + url + " : " + str(self.nbFiles) + " files to download.")
             for link in folder.files:
                 finalUrl = url + link
                 self.threads[finalUrl] = Thread(target=self.downloadText, args=[finalUrl])
                 self.threads[finalUrl].setName(finalUrl)
                 self.threads[finalUrl].daemon=True
                 self.threads[finalUrl].start()
-            #TODO: make this better
+            # TODO: make this better
             while not self.barrier.acquire(False):
                 time.sleep(1)
             self.barrier.release()
@@ -122,7 +124,7 @@ class Crawler:
         self.mutex.release()
         if self.finished == self.nbFiles:
             self.barrier.release()
-            print("Downloaded " + str(self.finished) + " files.")
+            self.log.info("Downloaded " + str(self.finished) + " files.")
 
 
 class FolderPage(HTMLParser):

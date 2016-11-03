@@ -9,6 +9,7 @@ Copyright (C) 2016 Kewin Dousse (Protectator)
 Licensed under the MIT License. See file LICENSE in the project root for license information.
 """
 import os
+import logging
 
 from src.databases.mysql.mysql import *
 from src.parsers.chaos import *
@@ -26,21 +27,22 @@ class Feeder():
         self.user = user
         self.password = password
         self.dbname = dbname
+        self.log = logging.getLogger('main')
 
     def feedAll(self):
         # Phase 3 : Fill DB
-        print("Connecting to database")
+        self.log.info("Connecting to database")
         self.db.connect(self.host, self.user, self.password, self.dbname)
-        print("Initializing tables")
+        self.log.info("Initializing tables")
         self.db.initialize()
-        print("Parsing files")
+        self.log.info("Parsing files")
         for root, dirs, files in os.walk(self.folder, topdown=False):
             for filePath in files:
                 path = "/".join(os.path.join(root, filePath).split(os.sep))
                 if os.path.getsize(path) == 0:
                     continue
                 file = TextPage(path)
-                print("Parsing file " + path)
+                self.log.info("Parsing file " + path)
                 type = file.folders
                 if type is None:
                     parser = UsageFile(path)
@@ -70,6 +72,6 @@ class Feeder():
                     self.db.fillUsage(parser)
 
     def postInsert(self):
-        print("Creating Index")
+        self.log.info("Creating Index")
         self.db.connect(self.host, self.user, self.password, self.dbname)
         self.db.postInsert()

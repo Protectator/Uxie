@@ -9,6 +9,7 @@ Copyright (C) 2016 Kewin Dousse (Protectator)
 Licensed under the MIT License. See file LICENSE in the project root for license information.
 """
 import argparse
+import logging
 
 from src.crawler import Crawler
 from src.feeder import Feeder
@@ -17,6 +18,19 @@ from warnings import filterwarnings
 import pymysql as pymysql
 filterwarnings('ignore', category = pymysql.Warning)
 
+# Configuring logging
+log = logging.getLogger('main')
+formatter = logging.Formatter('%(asctime)s %(levelname)s : %(message)s')
+fileHandler = logging.FileHandler('logs/main.log', mode='w')
+fileHandler.setLevel(logging.DEBUG)
+fileHandler.setFormatter(formatter)
+streamHandler = logging.StreamHandler()
+streamHandler.setLevel(logging.INFO)
+streamHandler.setFormatter(formatter)
+log.addHandler(fileHandler)
+log.addHandler(streamHandler)
+
+# Configuring argument parsing
 parser = argparse.ArgumentParser(description="Download all Pokemon Showdown's stats files, and fill a database with its stats.")
 parser.add_argument("dbms", help="Database Management System", choices=["mysql"])
 parser.add_argument("host", help="Database address")
