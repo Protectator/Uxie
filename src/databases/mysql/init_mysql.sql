@@ -83,17 +83,17 @@ CREATE TABLE `chaos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `chaos_pokemon` (
-  `year` SMALLINT UNSIGNED NOT NULL,
-  `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
-  `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` VARCHAR(31) NOT NULL,
-  `raw_count` INT UNSIGNED NOT NULL,
-  `usage` FLOAT,
-  `viability_ceiling1` SMALLINT UNSIGNED,
-  `viability_ceiling2` SMALLINT UNSIGNED,
-  `viability_ceiling3` SMALLINT UNSIGNED,
-  `viability_ceiling4` SMALLINT UNSIGNED,
+  `year`                            SMALLINT UNSIGNED NOT NULL,
+  `month`                           TINYINT UNSIGNED NOT NULL,
+  `format`                          VARCHAR(31) NOT NULL,
+  `elo`                             SMALLINT UNSIGNED NOT NULL,
+  `pokemon`                         VARCHAR(31) NOT NULL,
+  `raw_count`                       INT UNSIGNED NOT NULL,
+  `usage`                           FLOAT,
+  `viability_ceiling_total_players` SMALLINT UNSIGNED COMMENT 'Number of players using the pokemon',
+  `viability_ceiling_top_gxe`       SMALLINT UNSIGNED COMMENT 'Top GXE',
+  `viability_ceiling_gxe_99perc`    SMALLINT UNSIGNED COMMENT '99th percentile GXE',
+  `viability_ceiling_gxe_95perc`    SMALLINT UNSIGNED COMMENT '95th percentile GXE',
     PRIMARY KEY (`year`,`month`,`format`,`elo`, `pokemon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -188,15 +188,18 @@ CREATE TABLE `chaos_happiness` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `chaos_counters` (
-  `year` SMALLINT UNSIGNED NOT NULL,
-  `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
-  `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` VARCHAR(31) NOT NULL,
-  `counter` VARCHAR(31) NOT NULL,
-  `number1` DECIMAL(15,14) NOT NULL,
-  `number2` DECIMAL(15,14) NOT NULL,
-  `number3` DECIMAL(15,14) NOT NULL,
+  `year`        SMALLINT UNSIGNED NOT NULL,
+  `month`       TINYINT UNSIGNED  NOT NULL,
+  `format`      VARCHAR(31)       NOT NULL,
+  `elo`         SMALLINT UNSIGNED NOT NULL,
+  `pokemon`     VARCHAR(31)       NOT NULL,
+  `counter`     VARCHAR(31)       NOT NULL,
+  `occurences`  DECIMAL(15, 14)   NOT NULL
+  COMMENT 'Number n of times the matchup occurred (don\'t count U-Turn KOs or force-outs)',
+  `koorswitch`  DECIMAL(15, 14)   NOT NULL
+  COMMENT 'The fraction p of times the counter got the KO or caused a switch',
+  `standarddev` DECIMAL(15, 14)   NOT NULL
+  COMMENT 'Standard deviation for the previous value: sqrt(p*(1.0-p)/n)',
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`, `counter`),
   FOREIGN KEY (`year`,`month`,`format`,`elo`,`pokemon`)
   REFERENCES chaos_pokemon(`year`,`month`,`format`,`elo`,`pokemon`)
@@ -204,14 +207,14 @@ CREATE TABLE `chaos_counters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_pokemon` (
-  `year` SMALLINT UNSIGNED NOT NULL,
-  `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
-  `elo` SMALLINT UNSIGNED NOT NULL,
-  `pokemon` VARCHAR(31) NOT NULL,
-  `raw_count` INT(11) UNSIGNED NOT NULL,
-  `avg_weight` FLOAT,
-  `viability_ceiling` SMALLINT UNSIGNED,
+  `year`              SMALLINT UNSIGNED NOT NULL,
+  `month`             TINYINT UNSIGNED NOT NULL,
+  `format`            VARCHAR(31) NOT NULL,
+  `elo`               SMALLINT UNSIGNED NOT NULL,
+  `pokemon`           VARCHAR(31) NOT NULL,
+  `raw_count`         INT(11) UNSIGNED NOT NULL,
+  `avg_weight`        FLOAT,
+  `viability_ceiling` SMALLINT UNSIGNED COMMENT 'http://www.smogon.com/forums/threads/viability-ceiling-a-measure-of-how-far-a-pokemon-can-take-you.3546373',
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

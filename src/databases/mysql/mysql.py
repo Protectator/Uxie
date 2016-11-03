@@ -269,7 +269,7 @@ class MySQL(DataBase):
                  ] for pokemon in data]
             sql = "INSERT IGNORE INTO `chaos_pokemon`" \
                   "(`year`, `month`, `format`, `elo`, `pokemon`, `raw_count`, " \
-                  "`usage`, `viability_ceiling1`, `viability_ceiling2`, `viability_ceiling3`, `viability_ceiling4`)" \
+                  "`usage`, `viability_ceiling_total_players`, `viability_ceiling_top_gxe`, `viability_ceiling_gxe_99perc`, `viability_ceiling_gxe_95perc`)" \
                   " VALUES " \
                   "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.executemany(sql, array)
@@ -295,7 +295,7 @@ class MySQL(DataBase):
                      data[pokemon]['Checks and Counters'][counter][2],
                      ] for counter in data[pokemon]['Checks and Counters']]
                 sql = "INSERT IGNORE INTO `chaos_counters`" \
-                      "(`year`, `month`, `format`, `elo`, `pokemon`, `counter`, `number1`, `number2`, `number3`)" \
+                      "(`year`, `month`, `format`, `elo`, `pokemon`, `counter`, `occurences`, `koorswitch`, `standarddev`)" \
                       " VALUES " \
                       "(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 cursor.executemany(sql, array)

@@ -10,24 +10,28 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 import argparse
 import logging
+from warnings import filterwarnings
+
+import pymysql as pymysql
 
 from src.crawler import Crawler
 from src.feeder import Feeder
 
-from warnings import filterwarnings
-import pymysql as pymysql
 filterwarnings('ignore', category = pymysql.Warning)
 
 # Configuring logging
 log = logging.getLogger('main')
+log.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(levelname)s : %(message)s')
+
 fileHandler = logging.FileHandler('logs/main.log', mode='w')
 fileHandler.setLevel(logging.DEBUG)
 fileHandler.setFormatter(formatter)
+log.addHandler(fileHandler)
+
 streamHandler = logging.StreamHandler()
 streamHandler.setLevel(logging.INFO)
 streamHandler.setFormatter(formatter)
-log.addHandler(fileHandler)
 log.addHandler(streamHandler)
 
 # Configuring argument parsing
