@@ -57,7 +57,7 @@ def shouldDownload(url):
 
 
 class Crawler:
-    def __init__(self, baseUrl):
+    def __init__(self, baseUrl, filters):
         self.index = baseUrl
         self.threads = {}
         self.finished = 0
@@ -66,6 +66,7 @@ class Crawler:
         self.barrier = Semaphore(0)
         self.nbFiles = 0
         self.bar = ProgressBar(0)
+        self.filters = filters
         self.log = logging.getLogger('main')
 
     def run(self):
