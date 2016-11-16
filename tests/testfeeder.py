@@ -15,5 +15,12 @@ from src.feeder import Feeder
 class FeederTest(unittest.TestCase):
     def test_feed(self):
         print("Testing feeder")
-        feeder = Feeder('tests' + os.sep + 'textfiles', 'mysql', 'localhost', 'uxie', 'uxie', 'uxie')
+        filters = {
+            'year': '',
+            'month': '',
+            'format': '',
+            'gxe': '',
+            'type': ''
+        }
+        feeder = Feeder('tests' + os.sep + 'textfiles', 'mysql', 'localhost', 'uxie', 'uxie', 'uxie', filters)
         feeder.feedAll()
