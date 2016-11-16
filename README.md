@@ -1,4 +1,4 @@
-# Uxie [![Build Status](https://travis-ci.org/Protectator/Uxie.svg?branch=master)](https://travis-ci.org/Protectator/Uxie)
+# ![Uxie](static/uxie_icon.png) Uxie [![Build Status](https://travis-ci.org/Protectator/Uxie.svg?branch=master)](https://travis-ci.org/Protectator/Uxie)
 
 Uxie is a tool to build a database using Pokemon Showdown's usage stats.
 
@@ -12,7 +12,7 @@ Uxie is a tool to build a database using Pokemon Showdown's usage stats.
 
 Be sure you have an accessible instance of [MySQL](http://www.mysql.com/)
 
-Run `main.py`.
+Run `uxie.py`.
 
     usage: uxie.py [-h] [-v] [-V] [-1] [-2] [-3] [-y YEAR [YEAR ...]]
                    [-m MONTH [MONTH ...]] [-f FORMAT [FORMAT ...]]

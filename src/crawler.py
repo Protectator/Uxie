@@ -14,12 +14,10 @@ import requests
 import codecs
 import logging
 import threading
-import re
 
 from src import utils
 from src.parsers import textfile
 from src.constants import *
-from src.progressbar import *
 from tqdm import tqdm
 
 try:
@@ -46,31 +44,29 @@ def downloadFile(url):
                 raise e
 
 
-def shouldDownload(textPage):
-    finalPath = FOLDER_TO_SAVE + textPage.localPath
-    return not os.path.exists(finalPath)
-
-
 # Decorator
 def synchronized(method):
     def new_method(self, *arg, **kws):
         with self.lock:
             return method(self, *arg, **kws)
+
     return new_method
 
 
 class Crawler:
     lock = threading.RLock()
-    def __init__(self, baseUrl, filters):
-        self.index = baseUrl
+
+    def __init__(self, baseFolder, filters):
+        self.folder = baseFolder if baseFolder is not None else FOLDER_TO_SAVE
         self.toDownload = Queue()
-        self.bar = ProgressBar(0)
         self.filters = filters
         self.totalSize = 0
         self.log = logging.getLogger('main')
 
     def run(self):
+        self.log.info("Looking for files to download at " + BASE_URL + " ...")
         self.__discoverFolder('')
+        self.log.info("Starting to download " + str(self.toDownload.qsize()) + " files into folder " + self.folder)
         self.__download()
 
     def __discoverFolder(self, url):
@@ -92,7 +88,8 @@ class Crawler:
                     self.toDownload.put(page)
 
     def __download(self):
-        self.progressbar = tqdm(total=self.totalSize, unit_scale=True, unit='o', dynamic_ncols=True, maxinterval=1, mininterval=0.5, smoothing=0)
+        self.progressbar = tqdm(total=self.totalSize, unit_scale=True, unit='o', dynamic_ncols=True, maxinterval=1,
+                                mininterval=0.5, smoothing=0.05)
         self.runningThreads = Queue()
         for i in range(DOWNLOAD_THREADS):
             self.runningThreads.put(i)
@@ -110,10 +107,10 @@ class Crawler:
         except Empty:
             return None
 
-    def downloadText(self, url):
+    def __downloadText(self, url):
         (content, size) = downloadFile(url)
         path = urlsplit(url)[2]
-        filePath = FOLDER_TO_SAVE + "/" + path
+        filePath = self.folder + "/" + path
         if not os.path.exists(os.path.dirname(filePath)):
             try:
                 os.makedirs(os.path.dirname(filePath))
@@ -140,7 +137,7 @@ class CrawlerWorker(threading.Thread):
         while (page is not None):
             self.log.debug(self.name + " starting to download " + page.path)
             (content, size) = downloadFile(page.path)
-            filePath = FOLDER_TO_SAVE + page.localPath
+            filePath = self.crawler.folder + page.localPath
             if not os.path.exists(os.path.dirname(filePath)):
                 try:
                     os.makedirs(os.path.dirname(filePath))
@@ -207,4 +204,4 @@ class FolderPage(HTMLParser):
             else:
                 raise RuntimeError('Tried to add a size when no file was waiting for one.')
         except ValueError:
-            pass # It's probably the date in front of the file size : Everything's normal
+            pass  # It's probably something else : Everything's normal

@@ -59,11 +59,11 @@ parser.add_argument("-f", "--format", help="Filter : Only treat files of these f
 parser.add_argument("-g", "--gxe", help="Filter : Only treat files at exactly these gxe limits", nargs="+", type=int)
 parser.add_argument("-t", "--type", help="Filter : Only treat files of these types", nargs="+",
                     choices=['usage', 'chaos', 'leads', 'metagame', 'moveset'])
-parser.add_argument("-d", "--directory", help="directory to use to download files into, and to parse from")
+parser.add_argument("-d", "--directory", help="directory to download files into, and to parse from")
 args = parser.parse_args()
 
 if args.verbose:
-    streamHandler.setLevel(logging.DEBUG)
+    streamHandler.setLevel(logging.INFO)
 
 filters = {
     'year': args.year,
