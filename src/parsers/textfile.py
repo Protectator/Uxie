@@ -12,7 +12,7 @@ import re
 
 
 class TextPage:
-    def __init__(self, path):
+    def __init__(self, path, size = 0):
         self.path = path
         matchs = re.search('(\d+)-(\d+)(?:/?([^/]+)){0,2}/([^/]+)-(\d+)\.(\w+)', path)
         self.year = int(matchs.groups()[0])
@@ -21,6 +21,7 @@ class TextPage:
         self.meta = (matchs.groups()[3])
         self.elo = int(matchs.groups()[4])
         self.fileFormat = (matchs.groups()[5])
+        self.size = size
         self.localPath = "/%(year)s-%(month)s/%(folders)s/%(meta)s-%(elo)s.%(fileFormat)s" % {
             'year' : self.year,
             'month' : self.month,

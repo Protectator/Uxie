@@ -20,6 +20,7 @@ from src import utils
 from src.parsers import textfile
 from src.constants import *
 from src.progressbar import *
+from tqdm import tqdm
 
 try:
     from Queue import Queue, Empty
@@ -55,7 +56,6 @@ def synchronized(method):
     def new_method(self, *arg, **kws):
         with self.lock:
             return method(self, *arg, **kws)
-
     return new_method
 
 
@@ -66,6 +66,7 @@ class Crawler:
         self.toDownload = Queue()
         self.bar = ProgressBar(0)
         self.filters = filters
+        self.totalSize = 0
         self.log = logging.getLogger('main')
 
     def run(self):
@@ -78,20 +79,20 @@ class Crawler:
         folder = FolderPage(BASE_URL)
         folder.feed(content)
         for link in folder.folders:
-            finalUrl = url + link
+            finalUrl = url + link.url
             if utils.filterFolder(finalUrl, self.filters):
                 self.__discoverFolder(finalUrl)
-
         self.nbFiles = len(folder.files)
-
         if self.nbFiles > 0:
             for link in folder.files:
-                finalUrl = url + link
-                page = textfile.TextPage(finalUrl)
+                finalUrl = url + link.url
+                page = textfile.TextPage(finalUrl, link.size)
                 if utils.filter(page, self.filters):
+                    self.totalSize += page.size
                     self.toDownload.put(page)
 
     def __download(self):
+        self.progressbar = tqdm(total=self.totalSize, unit_scale=True, unit='o', dynamic_ncols=True, maxinterval=1, mininterval=0.5, smoothing=0)
         self.runningThreads = Queue()
         for i in range(DOWNLOAD_THREADS):
             self.runningThreads.put(i)
@@ -99,6 +100,7 @@ class Crawler:
             t.setDaemon(True)
             t.start()
         self.runningThreads.join()
+        self.progressbar.close()
 
     @synchronized
     def nextPage(self):
@@ -111,9 +113,7 @@ class Crawler:
     def downloadText(self, url):
         (content, size) = downloadFile(url)
         path = urlsplit(url)[2]
-
         filePath = FOLDER_TO_SAVE + "/" + path
-
         if not os.path.exists(os.path.dirname(filePath)):
             try:
                 os.makedirs(os.path.dirname(filePath))
@@ -138,11 +138,9 @@ class CrawlerWorker(threading.Thread):
         self.log.debug("Starting " + self.name)
         page = self.crawler.nextPage()
         while (page is not None):
-            self.log.debug(self.name + "starting to download " + page.path + " -> " + page.localPath)
+            self.log.debug(self.name + " starting to download " + page.path)
             (content, size) = downloadFile(page.path)
-
             filePath = FOLDER_TO_SAVE + page.localPath
-
             if not os.path.exists(os.path.dirname(filePath)):
                 try:
                     os.makedirs(os.path.dirname(filePath))
@@ -151,10 +149,23 @@ class CrawlerWorker(threading.Thread):
                         raise
             with codecs.open(filePath, "w+", "utf-8") as newFile:
                 newFile.write(content)
+            self.crawler.progressbar.update(page.size)
             page = self.crawler.nextPage()
         self.runningThreads.get()
         self.runningThreads.task_done()
         self.log.debug("Ending " + self.name)
+
+
+class FileLink():
+    def __init__(self, url):
+        self.url = url
+        self.size = 0
+
+    def setSize(self, size):
+        if self.size == 0:
+            self.size = int(size)
+        else:
+            raise RuntimeError('Tried to set size of a FileLink that has already been set.')
 
 
 class FolderPage(HTMLParser):
@@ -166,15 +177,34 @@ class FolderPage(HTMLParser):
         HTMLParser.__init__(self)
         self.folders = []
         self.files = []
+        self.needSize = False
         self.base = baseUrl
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            for key, value in attrs:
-                if key == 'href':
-                    if (not value) or (value[-3:] == "../"):
-                        continue
-                    elif value[-4:] == ".txt" or value[-5:] == ".json":
-                        self.files.append(value)
-                    else:
-                        self.folders.append(value)
+        if not self.needSize:
+            if tag == 'a':
+                for key, value in attrs:
+                    if key == 'href':
+                        if (not value) or (value[-3:] == "../"):
+                            continue
+                        elif value[-4:] == ".txt" or value[-5:] == ".json":
+                            self.files.append(FileLink(value))
+                            self.needSize = True
+                        else:
+                            self.folders.append(FileLink(value))
+        else:
+            raise RuntimeError('Tried to parse a link before the last one recieved a size.')
+
+    def handle_data(self, data):
+        try:
+            parts = data.split()
+            if len(parts) < 2:
+                return
+            val = int(parts[-1])
+            if self.needSize:
+                self.files[-1].setSize(val)
+                self.needSize = False
+            else:
+                raise RuntimeError('Tried to add a size when no file was waiting for one.')
+        except ValueError:
+            pass # It's probably the date in front of the file size : Everything's normal

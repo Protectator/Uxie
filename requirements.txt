@@ -2,3 +2,4 @@ PyMySQL==0.7.9
 redgreenunittest==0.1.1
 ujson==1.35
 requests==2.11.1
+tqdm==4.10.0
