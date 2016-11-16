@@ -17,16 +17,18 @@ from src.parsers.leads import *
 from src.parsers.metagame import *
 from src.parsers.moveset import *
 from src.parsers.usage import *
+from src import utils
 
-class Feeder():
 
-    def __init__(self, baseFolder, dbms, host, user, password, dbname):
+class Feeder:
+    def __init__(self, baseFolder, dbms, host, user, password, dbname, filters):
         self.folder = baseFolder
         self.db = MySQL()
         self.host = host
         self.user = user
         self.password = password
         self.dbname = dbname
+        self.filters = filters
         self.log = logging.getLogger('main')
 
     def feedAll(self):
@@ -42,34 +44,35 @@ class Feeder():
                 if os.path.getsize(path) == 0:
                     continue
                 file = TextPage(path)
-                self.log.info("Parsing file " + path)
-                type = file.folders
-                if type is None:
-                    parser = UsageFile(path)
-                    parser.parse()
-                    self.db.fillUsage(parser)
-                elif "leads" in type:
-                    parser = LeadsFile(path)
-                    parser.parse()
-                    self.db.fillLeads(parser)
-                elif "metagame" in type:
-                    parser = MetagameFile(path)
-                    parser.parse()
-                    self.db.fillMetagame(parser)
-                elif "moveset" in type:
-                    parser = MovesetFile(path)
-                    parser.parse()
-                    self.db.fillMoveset(parser)
-                elif "chaos" in type:
-                    parser = ChaosFile(path)
-                    parser.parse()
-                    self.db.fillChaos(parser)
-                else:
-                    if type == "mega":
-                        continue
-                    parser = UsageFile(path)
-                    parser.parse()
-                    self.db.fillUsage(parser)
+                if utils.filter(file, self.filters):
+                    self.log.info("Parsing file " + path)
+                    fileType = file.folders
+                    if fileType is None:
+                        parser = UsageFile(path)
+                        parser.parse()
+                        self.db.fillUsage(parser)
+                    elif "leads" in fileType:
+                        parser = LeadsFile(path)
+                        parser.parse()
+                        self.db.fillLeads(parser)
+                    elif "metagame" in fileType:
+                        parser = MetagameFile(path)
+                        parser.parse()
+                        self.db.fillMetagame(parser)
+                    elif "moveset" in fileType:
+                        parser = MovesetFile(path)
+                        parser.parse()
+                        self.db.fillMoveset(parser)
+                    elif "chaos" in fileType:
+                        parser = ChaosFile(path)
+                        parser.parse()
+                        self.db.fillChaos(parser)
+                    else:
+                        if fileType == "mega":
+                            continue
+                        parser = UsageFile(path)
+                        parser.parse()
+                        self.db.fillUsage(parser)
 
     def postInsert(self):
         self.log.info("Creating Index")

@@ -15,9 +15,17 @@ class TextPage:
     def __init__(self, path):
         self.path = path
         matchs = re.search('(\d+)-(\d+)(?:/?([^/]+)){0,2}/([^/]+)-(\d+)\.(\w+)', path)
-        self.year = (matchs.groups()[0])
-        self.month = (matchs.groups()[1])
+        self.year = int(matchs.groups()[0])
+        self.month = int(matchs.groups()[1])
         self.folders = (matchs.groups()[2])
         self.meta = (matchs.groups()[3])
-        self.elo = (matchs.groups()[4])
+        self.elo = int(matchs.groups()[4])
         self.fileFormat = (matchs.groups()[5])
+        self.localPath = "/%(year)s-%(month)s/%(folders)s/%(meta)s-%(elo)s.%(fileFormat)s" % {
+            'year' : self.year,
+            'month' : self.month,
+            'folders' : self.folders if self.folders is not None else "",
+            'meta' : self.meta,
+            'elo' : self.elo,
+            'fileFormat' : self.fileFormat
+        }

@@ -10,23 +10,25 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 import errno
 import os
-import re
 import requests
 import codecs
-import time
 import logging
+import threading
+import re
+
+from src import utils
+from src.parsers import textfile
+from src.constants import *
+from src.progressbar import *
 
 try:
+    from Queue import Queue, Empty
     from HTMLParser import HTMLParser
     from urlparse import urlsplit
 except ImportError:
+    from queue import Queue, Empty
     from urllib.parse import urlsplit
     from html.parser import HTMLParser
-
-from threading import Thread, Semaphore
-
-from src.constants import *
-from src.progressbar import *
 
 
 def downloadFile(url):
@@ -43,65 +45,68 @@ def downloadFile(url):
                 raise e
 
 
-def shouldDownload(url):
-    result = re.search('(\d+)-(\d+)\/.*', url)
-    year = int(result.groups()[0])
-    month = int(result.groups()[1])
-    if month == 12:
-        nextYear = year + 1
-    else:
-        nextYear = year
-    nextMonth = month % 12 + 1
-    finalPath = FOLDER_TO_SAVE + '/' + str(nextYear) + '-' + str(nextMonth).zfill(2) + '/'
+def shouldDownload(textPage):
+    finalPath = FOLDER_TO_SAVE + textPage.localPath
     return not os.path.exists(finalPath)
 
 
+# Decorator
+def synchronized(method):
+    def new_method(self, *arg, **kws):
+        with self.lock:
+            return method(self, *arg, **kws)
+
+    return new_method
+
+
 class Crawler:
+    lock = threading.RLock()
     def __init__(self, baseUrl, filters):
         self.index = baseUrl
-        self.threads = {}
-        self.finished = 0
-        self.size = 0
-        self.mutex = Semaphore(1)
-        self.barrier = Semaphore(0)
-        self.nbFiles = 0
+        self.toDownload = Queue()
         self.bar = ProgressBar(0)
         self.filters = filters
         self.log = logging.getLogger('main')
 
     def run(self):
-        self.downloadFolder(self.index)
+        self.__discoverFolder('')
+        self.__download()
 
-    def downloadFolder(self, url):
+    def __discoverFolder(self, url):
+        self.log.info("Discovering " + url)
         (content, size) = downloadFile(url)
         folder = FolderPage(BASE_URL)
         folder.feed(content)
         for link in folder.folders:
             finalUrl = url + link
-            if shouldDownload(finalUrl):
-                self.downloadFolder(finalUrl)
-            else:
-                self.log.info("Ignoring download of " + link)
+            if utils.filterFolder(finalUrl, self.filters):
+                self.__discoverFolder(finalUrl)
 
         self.nbFiles = len(folder.files)
-        self.finished = 0
-        self.size = 0
-        self.mutex = Semaphore(1)
-        self.barrier = Semaphore(0)
-        self.bar = ProgressBar(self.nbFiles)
 
         if self.nbFiles > 0:
-            self.log.info("/" + url + " : " + str(self.nbFiles) + " files to download.")
             for link in folder.files:
                 finalUrl = url + link
-                self.threads[finalUrl] = Thread(target=self.downloadText, args=[finalUrl])
-                self.threads[finalUrl].setName(finalUrl)
-                self.threads[finalUrl].daemon=True
-                self.threads[finalUrl].start()
-            # TODO: make this better
-            while not self.barrier.acquire(False):
-                time.sleep(1)
-            self.barrier.release()
+                page = textfile.TextPage(finalUrl)
+                if utils.filter(page, self.filters):
+                    self.toDownload.put(page)
+
+    def __download(self):
+        self.runningThreads = Queue()
+        for i in range(DOWNLOAD_THREADS):
+            self.runningThreads.put(i)
+            t = CrawlerWorker(self, i, self.toDownload, self.runningThreads)
+            t.setDaemon(True)
+            t.start()
+        self.runningThreads.join()
+
+    @synchronized
+    def nextPage(self):
+        try:
+            next = self.toDownload.get(False)
+            return next
+        except Empty:
+            return None
 
     def downloadText(self, url):
         (content, size) = downloadFile(url)
@@ -118,14 +123,38 @@ class Crawler:
         with codecs.open(filePath, "w+", "utf-8") as newFile:
             newFile.write(content)
 
-        self.mutex.acquire()
-        self.finished += 1
-        self.size += size
-        self.bar.update(self.finished, self.size)
-        self.mutex.release()
-        if self.finished == self.nbFiles:
-            self.barrier.release()
-            self.log.info("Downloaded " + str(self.finished) + " files.")
+
+class CrawlerWorker(threading.Thread):
+    def __init__(self, crawler, tId, queue, runningThreads):
+        threading.Thread.__init__(self)
+        self.crawler = crawler
+        self.tId = tId
+        self.queue = queue
+        self.runningThreads = runningThreads
+        self.log = logging.getLogger('main')
+        self.name = "crawlerworker_" + str(tId)
+
+    def run(self):
+        self.log.debug("Starting " + self.name)
+        page = self.crawler.nextPage()
+        while (page is not None):
+            self.log.debug(self.name + "starting to download " + page.path + " -> " + page.localPath)
+            (content, size) = downloadFile(page.path)
+
+            filePath = FOLDER_TO_SAVE + page.localPath
+
+            if not os.path.exists(os.path.dirname(filePath)):
+                try:
+                    os.makedirs(os.path.dirname(filePath))
+                except OSError as exc:
+                    if exc.errno != errno.EEXIST:
+                        raise
+            with codecs.open(filePath, "w+", "utf-8") as newFile:
+                newFile.write(content)
+            page = self.crawler.nextPage()
+        self.runningThreads.get()
+        self.runningThreads.task_done()
+        self.log.debug("Ending " + self.name)
 
 
 class FolderPage(HTMLParser):
