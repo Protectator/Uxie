@@ -18,6 +18,7 @@ from src.parsers.metagame import *
 from src.parsers.moveset import *
 from src.parsers.usage import *
 from src import utils
+from tqdm import tqdm
 
 
 class Feeder:
@@ -38,6 +39,8 @@ class Feeder:
         self.log.info("Initializing tables")
         self.db.initialize()
         self.log.info("Parsing files")
+        # Count files
+        nbFiles = 0
         for root, dirs, files in os.walk(self.folder, topdown=False):
             for filePath in files:
                 path = "/".join(os.path.join(root, filePath).split(os.sep))
@@ -45,7 +48,18 @@ class Feeder:
                     continue
                 file = TextPage(path)
                 if utils.filter(file, self.filters):
-                    self.log.info("Parsing file " + path)
+                    nbFiles += 1
+        self.progressbar = tqdm(total=nbFiles, unit='file', dynamic_ncols=True, maxinterval=1,
+                                mininterval=0.5, smoothing=0.05)
+        # Parse them
+        for root, dirs, files in os.walk(self.folder, topdown=False):
+            for filePath in files:
+                path = "/".join(os.path.join(root, filePath).split(os.sep))
+                if os.path.getsize(path) == 0:
+                    continue
+                file = TextPage(path)
+                if utils.filter(file, self.filters):
+                    self.log.debug("Parsing file " + path)
                     fileType = file.folders
                     if fileType is None:
                         parser = UsageFile(path)
@@ -73,6 +87,7 @@ class Feeder:
                         parser = UsageFile(path)
                         parser.parse()
                         self.db.fillUsage(parser)
+                    self.progressbar.update(1)
 
     def postInsert(self):
         self.log.info("Creating Index")
