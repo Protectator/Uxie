@@ -61,32 +61,39 @@ class Feeder:
                 if utils.filter(file, self.filters):
                     self.log.debug("Parsing file " + path)
                     fileType = file.folders
-                    if fileType is None:
-                        parser = UsageFile(path)
-                        parser.parse()
-                        self.db.fillUsage(parser)
-                    elif "leads" in fileType:
-                        parser = LeadsFile(path)
-                        parser.parse()
-                        self.db.fillLeads(parser)
-                    elif "metagame" in fileType:
-                        parser = MetagameFile(path)
-                        parser.parse()
-                        self.db.fillMetagame(parser)
-                    elif "moveset" in fileType:
-                        parser = MovesetFile(path)
-                        parser.parse()
-                        self.db.fillMoveset(parser)
-                    elif "chaos" in fileType:
-                        parser = ChaosFile(path)
-                        parser.parse()
-                        self.db.fillChaos(parser)
-                    else:
-                        if fileType == "mega":
-                            continue
-                        parser = UsageFile(path)
-                        parser.parse()
-                        self.db.fillUsage(parser)
+                    try:
+                        if fileType is None:
+                            parser = UsageFile(path)
+                            parser.parse()
+                            self.db.fillUsage(parser)
+                        elif "leads" in fileType:
+                            parser = LeadsFile(path)
+                            parser.parse()
+                            self.db.fillLeads(parser)
+                        elif "metagame" in fileType:
+                            parser = MetagameFile(path)
+                            parser.parse()
+                            self.db.fillMetagame(parser)
+                        elif "moveset" in fileType:
+                            parser = MovesetFile(path)
+                            parser.parse()
+                            self.db.fillMoveset(parser)
+                        elif "chaos" in fileType:
+                            parser = ChaosFile(path)
+                            parser.parse()
+                            self.db.fillChaos(parser)
+                        else:
+                            if fileType == "mega":
+                                continue
+                            parser = UsageFile(path)
+                            parser.parse()
+                            self.db.fillUsage(parser)
+                    except (pymysql.err.IntegrityError) as e:
+                        if (e.args[0] == 1062 and "monotype" in file.folders and file.year == 2014 and file.month == 12):
+                            pass # Known issue. 2014-12 contains twice every monotype entry. It's not a problem.
+                        else:
+                            raise
+
                     self.progressbar.update(1)
 
     def postInsert(self):
