@@ -56,11 +56,13 @@ These parameters are required, and must be in this order :
 
 | Flag | Argument(s) | Values | Description | Example |
 | --- | --- | --- | --- | --- |
-| `-y` | `YEAR [YEAR ...]` | `int` >= `2014` | Only treat files from the years listed by `YEAR` | `-y 2014 2015` |
-| `-m` | `MONTH [MONTH ...]` | `int` between `1` and `12` | Only treat files from the months listed by `MONTH` | `-m 1 2 3 10 11 12` |
-| `-f` | `FORMAT [FORMAT ...]` | `string` | Only treat files of the formats listed by `FORMAT` | `-f ou gen5ubers vgc2016` |
-| `-g` | `GXE [GXE ...]` | `int` |Only treat files of the minimal GXE of the values listed by `GXE` | `-g 0 1630` |
-| `-t` | `TYPE [TYPE ...]` | `` | Only treat files of the types listed by `TYPE` | `-t chaos moveset` |
+| `-y` | `YEAR [YEAR ...]` | an `int` >= `2014` | Only treat files from the years listed by `YEAR` | `-y 2014 2015` |
+| `-m` | `MONTH [MONTH ...]` | an `int` between `1` and `12` | Only treat files from the months listed by `MONTH` | `-m 1 2 3 10 11 12` |
+| `-f` | `FORMAT [FORMAT ...]` | a `string` | Only treat files of the formats listed by `FORMAT` | `-f ou gen5ubers vgc2016` |
+| `-g` | `GXE [GXE ...]` | an `int` |Only treat files of the minimal GXE of the values listed by `GXE` | `-g 0 1630` |
+| `-t` | `TYPE [TYPE ...]` | `usage`, `moveset`, `metagame`, `leads`, `chaos` | Only treat files of the types listed by `TYPE` | `-t chaos moveset` |
+
+**Warning** : Using `-t chaos` currently takes an **enormous** amount of time. Do it only if you're sure you need these data.
 
 ## License
 
