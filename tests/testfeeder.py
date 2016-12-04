@@ -14,7 +14,7 @@ from src.feeder import Feeder
 
 class FeederTest(unittest.TestCase):
     def test_feed(self):
-        print("Testing feeder")
+        print("Testing Feeder...")
         filters = {
             'year': '',
             'month': '',

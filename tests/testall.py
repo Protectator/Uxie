@@ -9,12 +9,9 @@ Copyright (C) 2016 Kewin Dousse (Protectator)
 Licensed under the MIT License. See file LICENSE in the project root for license information.
 """
 import unittest
+import os
 
-from src.databases.mysql.mysql import MySQL
-
-class MysqlTest(unittest.TestCase):
-    def test_db(self):
-        print("Testing MySQL initialize...")
-        db = MySQL()
-        db.connect('localhost', 'uxie', 'uxie', 'uxie')
-        db.initialize()
+class ExecutionTest(unittest.TestCase):
+    def test_exec(self):
+        print("Testing a simple execution...")
+        os.system("python uxie.py mysql localhost uxie uxie uxie -y 2014 -m 12 -t usage moveset metagame leads -g 0 -f uu nu")

@@ -57,7 +57,7 @@ class Feeder:
         self.feederDb.connect(self.host, self.user, self.password, self.dbname)
         self.log.info("Initializing tables")
         self.feederDb.initialize()
-        self.log.info("Parsing files")
+        self.log.info("Filtering local files")
 
         # Count files
         nbFiles = 0
@@ -68,12 +68,15 @@ class Feeder:
                     continue
                 file = TextPage(path)
                 if utils.filter(file, self.filters):
-                    self.toParse.put(file)
-                    nbFiles += 1
-        self.progressbar = tqdm(total=nbFiles, unit='file', dynamic_ncols=True, maxinterval=1,
-                                mininterval=0.5, smoothing=0.05)
+                    if file.folders and "/mega/" not in file.folders:
+                        self.toParse.put(file)
+                        nbFiles += 1
 
         # Parse them
+        self.log.info("Parsing files")
+        self.progressbar = tqdm(total=nbFiles, unit='file', dynamic_ncols=True, maxinterval=1,
+                                mininterval=0.1, smoothing=0.05)
+        self.progressbar.update(0)
         self.runningThreads = Queue()
         for i in range(DATABASE_THREADS):
             self.runningThreads.put(i)

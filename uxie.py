@@ -87,3 +87,5 @@ if not args.skip_parse:
 if not args.skip_index:
     feeder = Feeder('stats', args.dbms, args.host, args.user, args.password, args.dbname, filters)
     feeder.postInsert()
+
+logging.getLogger('main').info('Finished !')

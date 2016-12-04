@@ -17,6 +17,7 @@ from src.parsers.chaos import ChaosFile
 
 class UsageTest(unittest.TestCase):
     def test_parse(self):
+        print("Testing Usage parser...")
         usage_file = UsageFile('tests/textfiles/2016-08/uu-1760.txt')
         usage_file.parse()
         result = usage_file.data
@@ -29,6 +30,7 @@ class UsageTest(unittest.TestCase):
 
 class MetagameTest(unittest.TestCase):
     def test_parse(self):
+        print("Testing Metagame parser...")
         metagame_file = MetagameFile('tests/textfiles/2016-08/metagame/uu-1760.txt')
         metagame_file.parse()
         result = metagame_file.data
@@ -45,6 +47,7 @@ class MetagameTest(unittest.TestCase):
 
 class MovesetTest(unittest.TestCase):
     def test_parse(self):
+        print("Testing Moveset parser...")
         moveset_file = MovesetFile('tests/textfiles/2016-08/moveset/uu-1760.txt')
         moveset_file.parse()
         result = moveset_file.data
@@ -102,6 +105,7 @@ class MovesetTest(unittest.TestCase):
 
 class LeadsTest(unittest.TestCase):
     def test_parse(self):
+        print("Testing Leads parser...")
         leads_file = LeadsFile('tests/textfiles/2016-08/leads/uu-1760.txt')
         leads_file.parse()
         result = leads_file.data
@@ -113,5 +117,6 @@ class LeadsTest(unittest.TestCase):
 
 class ChaosTest(unittest.TestCase):
     def test_parse(self):
+        print("Testing Chaos parser...")
         chaos_file = ChaosFile('tests/textfiles/2016-08/chaos/battlespotspecial17-0.json')
         result = chaos_file.parse()
