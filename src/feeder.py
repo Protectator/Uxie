@@ -113,7 +113,7 @@ class FeederWorker(threading.Thread):
         page = self.feeder.nextPage()
         while (page is not None):
             self.log.debug(self.name + " starting to parse " + page.path)
-            path = self.feeder.folder + "/" + page.localPath
+            path = "/".join(os.path.join(self.feeder.folder, page.localPath[1:]).split(os.sep))
             file = TextPage(path)
             if utils.filter(file, self.feeder.filters):
                 self.log.debug("Parsing file " + path)
@@ -141,6 +141,8 @@ class FeederWorker(threading.Thread):
                         self.db.fillChaos(parser)
                     else:
                         if fileType == "mega":
+                            self.feeder.progressbar.update(1)
+                            page = self.feeder.nextPage()
                             continue
                         parser = UsageFile(path)
                         parser.parse()
