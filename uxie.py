@@ -10,6 +10,7 @@ Licensed under the MIT License. See file LICENSE in the project root for license
 """
 import argparse
 import logging
+import os
 from warnings import filterwarnings
 
 import pymysql as pymysql
@@ -24,6 +25,8 @@ log = logging.getLogger('main')
 log.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(levelname)s : %(message)s')
 
+if not os.path.exists('logs/'):
+    os.makedirs('logs')
 fileHandler = logging.FileHandler('logs/main.log', mode='w')
 fileHandler.setLevel(logging.DEBUG)
 fileHandler.setFormatter(formatter)

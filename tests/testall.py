@@ -14,4 +14,5 @@ import os
 class ExecutionTest(unittest.TestCase):
     def test_exec(self):
         print("Testing a simple execution...")
-        os.system("python uxie.py mysql localhost uxie uxie uxie -y 2014 -m 12 -t usage moveset metagame leads -g 0 -f uu nu")
+        result = os.system("python uxie.py mysql localhost uxie uxie uxie -y 2014 -m 12 -t usage moveset metagame leads -g 0 -f uu nu")
+        self.assertEqual(result, 0, "Return code of execution is zero.")
