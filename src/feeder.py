@@ -67,9 +67,14 @@ class Feeder:
                     continue
                 file = TextPage(path)
                 if utils.filter(file, self.filters):
-                    if file.folders and "/mega/" not in file.folders:
+                    if file.folders:
+                        if "/mega/" not in file.path:
+                            self.toParse.put(file)
+                            nbFiles += 1
+                    else:
                         self.toParse.put(file)
                         nbFiles += 1
+
 
         # Parse them
         self.log.info("Parsing files")
