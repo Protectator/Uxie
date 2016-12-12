@@ -159,6 +159,9 @@ class FeederWorker(threading.Thread):
                         pass # Known issue. 2014-12 contains twice every monotype entry. It's not a problem.
                     else:
                         raise
+                except (IndexError, KeyError) as e2:
+                    self.log.error("Error in thread " + self.name + " while parsing file at " + path + " : " + str(e2))
+                    pass
             self.feeder.progressbar.update(1)
             page = self.feeder.nextPage()
         self.runningThreads.get()
