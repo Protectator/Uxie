@@ -50,12 +50,13 @@ class Feeder:
         self.toParse = Queue()
         self.log = logging.getLogger('main')
 
-    def feedAll(self):
+    def feedAll(self, append = False):
         # Phase 3 : Fill DB
         self.log.info("Connecting to database")
         self.feederDb.connect(self.host, self.user, self.password, self.dbname)
-        self.log.info("Initializing tables")
-        self.feederDb.initialize()
+        if (not append):
+            self.log.info("Initializing tables")
+            self.feederDb.initialize()
         self.log.info("Filtering local files")
 
         # Count files

@@ -63,6 +63,7 @@ parser.add_argument("-g", "--gxe", help="Filter : Only treat files at exactly th
 parser.add_argument("-t", "--type", help="Filter : Only treat files of these types", nargs="+",
                     choices=['usage', 'chaos', 'leads', 'metagame', 'moveset'])
 parser.add_argument("-d", "--directory", help="directory to download files into, and to parse from")
+parser.add_argument("-a", "--append", help="do not erase any current table, only append lines", action="store_true")
 args = parser.parse_args()
 
 if args.verbose:
@@ -84,7 +85,7 @@ if not args.skip_download:
 # Phase 2 : Parse
 if not args.skip_parse:
     feeder = Feeder('stats', args.dbms, args.host, args.user, args.password, args.dbname, filters)
-    feeder.feedAll()
+    feeder.feedAll(args.append)
 
 # Phase 3 : Post-Insertion
 if not args.skip_index:
