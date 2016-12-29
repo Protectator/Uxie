@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `metagame_usages`;
 CREATE TABLE `usage` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `total_battles` INT(11) UNSIGNED NOT NULL,
   `avg_weight_per_team` DECIMAL(4,3) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE `usage` (
 CREATE TABLE `usage_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `usage_percent` DECIMAL(8,5) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `usage_pokemon` (
 CREATE TABLE `leads` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `total_leads` INT(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`year`,`month`,`format`,`elo`)
@@ -60,7 +60,7 @@ CREATE TABLE `leads` (
 CREATE TABLE `leads_pokemon` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `usage_percent` DECIMAL(8,5) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE `leads_pokemon` (
 CREATE TABLE `chaos` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `team_type` VARCHAR(31),
   `cutoff` FLOAT NOT NULL,
@@ -83,24 +83,24 @@ CREATE TABLE `chaos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `chaos_pokemon` (
-  `year`                            SMALLINT UNSIGNED NOT NULL,
-  `month`                           TINYINT UNSIGNED NOT NULL,
-  `format`                          VARCHAR(31) NOT NULL,
-  `elo`                             SMALLINT UNSIGNED NOT NULL,
-  `pokemon`                         VARCHAR(31) NOT NULL,
-  `raw_count`                       INT UNSIGNED NOT NULL,
-  `usage`                           FLOAT,
+  `year` SMALLINT UNSIGNED NOT NULL,
+  `month` TINYINT UNSIGNED NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
+  `elo` SMALLINT UNSIGNED NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `raw_count` INT UNSIGNED NOT NULL,
+  `usage` FLOAT,
   `viability_ceiling_total_players` SMALLINT UNSIGNED COMMENT 'Number of players using the pokemon',
-  `viability_ceiling_top_gxe`       SMALLINT UNSIGNED COMMENT 'Top GXE',
-  `viability_ceiling_gxe_99perc`    SMALLINT UNSIGNED COMMENT '99th percentile GXE',
-  `viability_ceiling_gxe_95perc`    SMALLINT UNSIGNED COMMENT '95th percentile GXE',
+  `viability_ceiling_top_gxe` SMALLINT UNSIGNED COMMENT 'Top GXE',
+  `viability_ceiling_gxe_99perc` SMALLINT UNSIGNED COMMENT '99th percentile GXE',
+  `viability_ceiling_gxe_95perc` SMALLINT UNSIGNED COMMENT '95th percentile GXE',
   PRIMARY KEY (`year`,`month`,`format`,`elo`, `pokemon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `chaos_abilities` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `ability` VARCHAR(31) NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE `chaos_abilities` (
 CREATE TABLE `chaos_items` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `item` VARCHAR(31) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE `chaos_items` (
 CREATE TABLE `chaos_spreads` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `nature` VARCHAR(15) NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE `chaos_spreads` (
 CREATE TABLE `chaos_moves` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `move` VARCHAR(31) NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE `chaos_moves` (
 CREATE TABLE `chaos_teammates` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `teammate` VARCHAR(31) NOT NULL,
@@ -176,7 +176,7 @@ CREATE TABLE `chaos_teammates` (
 CREATE TABLE `chaos_happiness` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `value` TINYINT UNSIGNED NOT NULL,
@@ -188,13 +188,13 @@ CREATE TABLE `chaos_happiness` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `chaos_counters` (
-  `year`        SMALLINT UNSIGNED NOT NULL,
-  `month`       TINYINT UNSIGNED  NOT NULL,
-  `format`      VARCHAR(31)       NOT NULL,
-  `elo`         SMALLINT UNSIGNED NOT NULL,
-  `pokemon`     VARCHAR(31)       NOT NULL,
-  `counter`     VARCHAR(31)       NOT NULL,
-  `occurences`  DECIMAL(15, 14)   NOT NULL
+  `year` SMALLINT UNSIGNED NOT NULL,
+  `month` TINYINT UNSIGNED NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
+  `elo` SMALLINT UNSIGNED NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `counter` VARCHAR(31) NOT NULL,
+  `occurences` DECIMAL(15, 14) NOT NULL
   COMMENT 'Number n of times the matchup occurred (don\'t count U-Turn KOs or force-outs)',
   `koorswitch`  DECIMAL(15, 14)   NOT NULL
   COMMENT 'The fraction p of times the counter got the KO or caused a switch',
@@ -207,13 +207,13 @@ CREATE TABLE `chaos_counters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `moveset_pokemon` (
-  `year`              SMALLINT UNSIGNED NOT NULL,
-  `month`             TINYINT UNSIGNED NOT NULL,
-  `format`            VARCHAR(31) NOT NULL,
-  `elo`               SMALLINT UNSIGNED NOT NULL,
-  `pokemon`           VARCHAR(31) NOT NULL,
-  `raw_count`         INT(11) UNSIGNED NOT NULL,
-  `avg_weight`        FLOAT,
+  `year` SMALLINT UNSIGNED NOT NULL,
+  `month` TINYINT UNSIGNED NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
+  `elo` SMALLINT UNSIGNED NOT NULL,
+  `pokemon` VARCHAR(31) NOT NULL,
+  `raw_count` INT(11) UNSIGNED NOT NULL,
+  `avg_weight` FLOAT,
   `viability_ceiling` SMALLINT UNSIGNED COMMENT 'http://www.smogon.com/forums/threads/viability-ceiling-a-measure-of-how-far-a-pokemon-can-take-you.3546373',
   PRIMARY KEY (`year`,`month`,`format`,`elo`,`pokemon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -221,7 +221,7 @@ CREATE TABLE `moveset_pokemon` (
 CREATE TABLE `moveset_abilities` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `ability` VARCHAR(31) NOT NULL,
@@ -235,7 +235,7 @@ CREATE TABLE `moveset_abilities` (
 CREATE TABLE `moveset_items` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `item` VARCHAR(31) NOT NULL,
@@ -249,7 +249,7 @@ CREATE TABLE `moveset_items` (
 CREATE TABLE `moveset_spreads` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `nature` VARCHAR(15) NOT NULL,
@@ -269,7 +269,7 @@ CREATE TABLE `moveset_spreads` (
 CREATE TABLE `moveset_moves` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `move` VARCHAR(31) NOT NULL,
@@ -283,7 +283,7 @@ CREATE TABLE `moveset_moves` (
 CREATE TABLE `moveset_teammates` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `teammate` VARCHAR(31) NOT NULL,
@@ -297,7 +297,7 @@ CREATE TABLE `moveset_teammates` (
 CREATE TABLE `moveset_counters` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `pokemon` VARCHAR(31) NOT NULL,
   `counter` VARCHAR(31) NOT NULL,
@@ -315,7 +315,7 @@ CREATE TABLE `moveset_counters` (
 CREATE TABLE IF NOT EXISTS `metagame_usages` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `metagame` VARCHAR(31) NOT NULL,
   `percentage` DECIMAL(8,5) NOT NULL,
@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `metagame_usages` (
 CREATE TABLE IF NOT EXISTS `metagame_graphs` (
   `year` SMALLINT UNSIGNED NOT NULL,
   `month` TINYINT UNSIGNED NOT NULL,
-  `format` VARCHAR(31) NOT NULL,
+  `format` VARCHAR(63) NOT NULL,
   `elo` SMALLINT UNSIGNED NOT NULL,
   `key` DECIMAL(6,3) NOT NULL,
   `value` DECIMAL(6,3) NOT NULL,
