@@ -51,6 +51,7 @@ These parameters are required, and must be in this order :
 | `-2` or `--skip-parse` | - | Skip the parse and feed the DB phase |
 | `-3` or `--skip-index` | - | Skip the indexing DB phase |
 | `-d` or `--directory` | `DIRECTORY` | Save and load files from `DIRECTORY`. Default directory used is `stats` |
+| `-a` or `--append` | - | Do not delete or create any table, only append data to existing ones |
 
 #### Filters
 
