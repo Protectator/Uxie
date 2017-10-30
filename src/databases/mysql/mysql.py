@@ -4,7 +4,7 @@
 This file is part of Uxie.
 
 Uxie - Pokemon Showdown's usage stats database builder
-Copyright (C) 2016 Kewin Dousse (Protectator)
+Copyright (C) 2016-2017 Kewin Dousse (Protectator)
 
 Licensed under the MIT License. See file LICENSE in the project root for license information.
 """
